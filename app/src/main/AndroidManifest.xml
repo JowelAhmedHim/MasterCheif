@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MasterChef">
         <activity
+            android:name=".ui.UploadVideo"
+            android:exported="true" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>

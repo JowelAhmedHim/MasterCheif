@@ -2,6 +2,7 @@ package com.example.masterchef.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -20,10 +21,15 @@ public class MainActivity extends AppCompatActivity{
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton fab;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
 
         fab = findViewById(R.id.fab);

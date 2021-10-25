@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.FileUtils;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
@@ -34,18 +35,23 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UploadVideo extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class UploadVideo extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     public static final int VIDEO_REQUEST_CODE = 100;
     Toolbar toolbar;
     private EditText videoNameEt,videoDescriptionEt;
     private Spinner spinner ;
     private TextView imageTv,videoTv;
-    private Button upload,videoBtn;
+    private Button upload,videoBtn,thumbnailBtn;
+
+
+
+    String videoTitle;
+    String videoDescription;
+    String videoCategory;
 
     Uri videoUri;
-    String videoCategory;
-    String videoTitle;
+
     String currentUid;
     StorageReference mStorageReference;
     StorageTask mUploadTask;
@@ -71,14 +77,14 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
         init();
         spinnerFunction();
-        videoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openVideoFile();
-            }
-        });
+        videoBtn.setOnClickListener(this);
+        thumbnailBtn.setOnClickListener(this);
 
+        videoTitle = videoNameEt.getText().toString();
+        videoDescription = videoDescriptionEt.getText().toString();
+        upload.setOnClickListener(this);
 
+        dataValidation();
 
 
     }
@@ -91,6 +97,8 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         imageTv = findViewById(R.id.image_tv);
         upload = findViewById(R.id.upload);
         videoBtn = findViewById(R.id.vide_btn);
+        thumbnailBtn = findViewById(R.id.image_btn);
+
 
 
     }
@@ -120,6 +128,23 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         videoCategory = adapterView.getItemAtPosition(0).toString();
     }
 
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()){
+            case R.id.vide_btn:
+                openVideoFile();
+                break;
+            case R.id.image_btn:
+                imagePicker();
+                break;
+            case R.id.upload:
+                dataValidation();
+                break;
+        }
+
+    }
+
     public void openVideoFile(){
         
         startActivityForResult(Intent.createChooser(
@@ -127,6 +152,19 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                         .setType("video/*"), "Choose Video"),VIDEO_REQUEST_CODE);
 
     }
+
+
+    private void imagePicker() {
+    }
+
+
+
+    private void dataValidation() {
+
+    }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -164,7 +202,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
             }
         }
     }
-
 
 
 

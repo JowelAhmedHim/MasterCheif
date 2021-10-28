@@ -2,17 +2,25 @@ package com.example.masterchef.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,12 +40,24 @@ import com.google.firebase.storage.StorageTask;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UploadVideo extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
+
+    //permission code
+    public static final int CAMERA_REQUEST_CODE = 200;
+    public static final int STORAGE_REQUEST_CODE = 300;
+    //image pick constants
+    public static final int IMAGE_PICK_GALLERY_CODE = 400;
+    public static final int IMAGE_PICK_CAMERA_CODE = 500;
+
     public static final int VIDEO_REQUEST_CODE = 100;
+
+    private String[] cameraPermission;
+    private String[] storagePermission;
     Toolbar toolbar;
     private EditText videoNameEt,videoDescriptionEt;
     private Spinner spinner ;
@@ -50,7 +70,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     String videoDescription;
     String videoCategory;
 
-    Uri videoUri;
+    Uri videoUri,thumbnailUri;
 
     String currentUid;
     StorageReference mStorageReference;
@@ -76,6 +96,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         });
 
         init();
+        initPermission();
         spinnerFunction();
         videoBtn.setOnClickListener(this);
         thumbnailBtn.setOnClickListener(this);
@@ -101,6 +122,11 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
 
 
+    }
+
+    private void initPermission() {
+        cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
     }
 
     //spinner function generate
@@ -146,7 +172,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public void openVideoFile(){
-        
         startActivityForResult(Intent.createChooser(
                 new Intent(Intent.ACTION_GET_CONTENT)
                         .setType("video/*"), "Choose Video"),VIDEO_REQUEST_CODE);
@@ -154,17 +179,127 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     }
 
 
+    // function for image picker dialog
     private void imagePicker() {
+
+        //Option to show in dialog
+        String [] options = {"Camera","Gallery"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick Image")
+                .setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == 0){
+                            //camera clicked
+                            if (checkCameraPermission()){
+                                //camera permission allowed
+                                pickFromCamera();
+                            }else{
+                                requestCameraPermission();
+                            }
+                        }else if (i==1){
+                            if (checkStoragePermission()){
+                                //storage permission granted
+                                pickFromGallery();
+                            }else {
+                                // storage permission not granted
+                                requestStoragePermission();
+                            }
+                        }
+                    }
+                }).show();
+
     }
 
+    //request storage permission
+    private void requestStoragePermission(){
+        ActivityCompat.requestPermissions(this,storagePermission,STORAGE_REQUEST_CODE);
+
+    }
+
+    //check storage permission
+    private boolean checkStoragePermission() {
+        boolean result = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED;
+        return result;
+    }
+
+    //request Camera Permission
+    private void requestCameraPermission(){
+        ActivityCompat.requestPermissions(this,cameraPermission,CAMERA_REQUEST_CODE);
+
+    }
+
+    //check Camera Permission
+    private boolean checkCameraPermission(){
+        boolean result = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+
+        boolean result1 = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)==(PackageManager.PERMISSION_GRANTED);
+
+        return result && result1;
+
+    }
+
+
+    //picking image function from camera
+    private void pickFromCamera() {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Images.Media.TITLE,"Temp_Image title");
+        contentValues.put(MediaStore.Images.Media.DESCRIPTION,"Temp_Image description");
+
+        thumbnailUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,thumbnailUri);
+        startActivityForResult(intent,IMAGE_PICK_CAMERA_CODE);
+
+    }
+
+    //picking image function from gallery
+    private void pickFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent,IMAGE_PICK_GALLERY_CODE);
+    }
 
 
     private void dataValidation() {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE:
+                if (grantResults.length>0 ){
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    if (cameraAccepted && storageAccepted){
+                        //permission granted
+                        pickFromCamera();
+                    }else {
+                        //permission denied
+                        Toast.makeText(this,"Camera permission needed",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case STORAGE_REQUEST_CODE:
+                if (grantResults.length>0){
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (storageAccepted){
+                        pickFromGallery();
+                    }else{
+                        Toast.makeText(this, "Storage Permission needed", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -198,11 +333,32 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
                     }
                     break;
+                case IMAGE_PICK_CAMERA_CODE:
+                    getImageFileName(thumbnailUri);
+                    break;
+                case IMAGE_PICK_GALLERY_CODE:
+                    thumbnailUri = data.getData();
+                    getImageFileName(thumbnailUri);
+                    break;
 
             }
         }
     }
 
+    private void getImageFileName(Uri thumbnailUri) {
+        String imageName = "";
+        Cursor cursor = getContentResolver().query(thumbnailUri,null,null,null,null);
+        try {
+            int name = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            cursor.moveToNext();
+            imageName = cursor.getString(name);
+            imageTv.setText(imageName);
+        }catch (Exception e){
+            Toast.makeText(this, "Something wrong", Toast.LENGTH_SHORT).show();
+        }finally {
+            cursor.close();
+        }
+    }
 
 
 }

@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
             }
         });
-        Toast.makeText(MainActivity.this, "Main Activity", Toast.LENGTH_SHORT).show();
+
 
 
         //bottom Navigation Setup

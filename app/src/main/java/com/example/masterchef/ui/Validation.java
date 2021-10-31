@@ -1,5 +1,6 @@
 package com.example.masterchef.ui;
 
+import android.content.Context;
 import android.util.Patterns;
 import android.widget.EditText;
 
@@ -9,7 +10,13 @@ import java.util.regex.Pattern;
 
 public class Validation {
 
-   public boolean nameValidation(EditText editText, TextInputLayout textInputLayout){
+    private Context context;
+
+    public Validation(Context context) {
+        this.context = context;
+    }
+
+    public boolean nameValidation(EditText editText, TextInputLayout textInputLayout){
        String value = editText.getText().toString();
        String noWhiteSpace = "(?=\\s+$)";
        if (value.isEmpty()){
@@ -18,7 +25,7 @@ public class Validation {
        }else if (value.length() >=15){
            textInputLayout.setError("Username too long");
            return false;
-       }else if (!value.matches(noWhiteSpace)){
+       }else if (value.matches(noWhiteSpace)){
            textInputLayout.setError("White spaces are not allowed");
             return false;
        }
@@ -52,7 +59,7 @@ public class Validation {
 //               "(?=.*[A-Z])" + //at least one Upper Case letter
                "(?=.*[a-zA-Z])" + //any letter
                "(?=.*[@#$%^&+=])" + //at least one special character
-               "(?=\\s+$)" +  // no white space
+//               "(?=\\s+$)" +  // no white space
                ".{4,}" + //at least 4 digit
                "$";
        if (value.isEmpty()){

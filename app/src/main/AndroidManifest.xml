@@ -15,7 +15,14 @@
         android:theme="@style/Theme.MasterChef">
         <activity
             android:name=".ui.activities.SignUp"
-            android:exported="true" />
+
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activities.SettingActivity"
             android:exported="true" />
@@ -25,11 +32,7 @@
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

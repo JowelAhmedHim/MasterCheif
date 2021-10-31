@@ -1,4 +1,4 @@
-package com.example.masterchef.ui;
+package com.example.masterchef.ui.fragments;
 
 import android.os.Bundle;
 
@@ -11,13 +11,14 @@ import android.view.ViewGroup;
 import com.example.masterchef.R;
 
 
-public class ProfileFollowerFragment extends Fragment {
+public class ProfileVideoFragment extends Fragment {
 
-   String title;
 
-    public ProfileFollowerFragment(String mTitle) {
+    private String title;
+
+    public ProfileVideoFragment(String mTitle) {
         // Required empty public constructor
-        title = mTitle;
+        this.title = mTitle;
     }
 
 
@@ -25,6 +26,6 @@ public class ProfileFollowerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_followe, container, false);
+        return inflater.inflate(R.layout.fragment_profile_video, container, false);
     }
 }

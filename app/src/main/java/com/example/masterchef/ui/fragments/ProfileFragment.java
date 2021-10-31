@@ -1,4 +1,4 @@
-package com.example.masterchef.ui;
+package com.example.masterchef.ui.fragments;
 
 import android.os.Bundle;
 

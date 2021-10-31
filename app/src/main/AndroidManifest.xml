@@ -14,13 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MasterChef">
         <activity
-            android:name=".ui.SettingActivity"
+            android:name=".ui.activities.SignUp"
             android:exported="true" />
         <activity
-            android:name=".ui.UploadVideo"
+            android:name=".ui.activities.SettingActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activities.UploadVideo"
+            android:exported="true" />
+        <activity
+            android:name=".ui.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

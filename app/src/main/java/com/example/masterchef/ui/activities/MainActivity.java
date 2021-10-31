@@ -1,4 +1,4 @@
-package com.example.masterchef.ui;
+package com.example.masterchef.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -12,9 +12,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.masterchef.R;
+import com.example.masterchef.ui.fragments.FavouriteFragment;
+import com.example.masterchef.ui.fragments.LeaderboardFragment;
+import com.example.masterchef.ui.fragments.ProfileFragment;
+import com.example.masterchef.ui.fragments.RecipesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,UploadVideo.class);
+                Intent intent = new Intent(MainActivity.this, UploadVideo.class);
                 startActivity(intent);
             }
         });
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new RecipesFragment()).commit();
                 break;
             case R.id.nav_setting:
-                Intent intent = new Intent(MainActivity.this,SettingActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.nav_logout:

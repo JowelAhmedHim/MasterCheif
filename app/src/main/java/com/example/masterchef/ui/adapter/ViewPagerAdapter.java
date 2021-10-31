@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.masterchef.ui.ProfileFollowerFragment;
-import com.example.masterchef.ui.ProfileVideoFragment;
+import com.example.masterchef.ui.fragments.ProfileFollowerFragment;
+import com.example.masterchef.ui.fragments.ProfileVideoFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 

@@ -6,75 +6,84 @@
     xmlns:Tools="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ProfileFragment">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_details"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="#EFBBBC">
+        android:padding="@dimen/_4sdp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profile_image"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:src="@drawable/ic_baseline_person_24"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp" />
+        <View
+            android:id="@+id/viewSupporter"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@id/userImage"/>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/profile_image"
-            android:layout_alignBottom="@+id/profile_image"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/profile_image">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp">
-                <TextView
-                    android:id="@+id/user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Jowel Ahmed Him"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/background_tv_show"
+            android:paddingBottom="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/userName"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="5dp" />
 
-                <TextView
-                    android:id="@+id/expertnessLevel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/user_name"
-                    android:text="Expert |"
-                    android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle" />
-
-                <TextView
-                    android:id="@+id/userAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/user_name"
-                    android:layout_toEndOf="@+id/expertnessLevel"
-                    android:text=" Dhaka"
-                    android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle" />
-
-            </RelativeLayout>
-
-
-        </RelativeLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImage"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:scaleType="centerCrop"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@mipmap/ic_launcher"/>
 
         <TextView
-            android:id="@+id/userDetails"
-            android:layout_width="wrap_content"
+            android:id="@+id/userName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_image"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
-            android:maxLines="2"
-            android:text="Hello world. I am jowel Ahmed himakjldhjahdahdhiada" />
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:includeFontPadding="false"
+            android:paddingTop="@dimen/_8sdp"
+            android:text="Jowel"
+            android:textColor="@color/colorTextPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userImage"
+            app:layout_constraintTop_toTopOf="@id/userImage" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/userCity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubontu_regular"
+            android:text="Dhaka"
+            android:textColor="@color/colorTextOther"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintEnd_toEndOf="@+id/userName"
+            app:layout_constraintStart_toStartOf="@+id/userName"
+            app:layout_constraintTop_toBottomOf="@+id/userName" />
+        <TextView
+            android:id="@+id/userDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubontu_regular"
+            android:text=" I am Jowel Ahmed him. A professional cheif "
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/_12sdp"
+            android:maxLines="2"
+            app:layout_constraintEnd_toEndOf="@+id/userName"
+            app:layout_constraintStart_toStartOf="@+id/userName"
+            app:layout_constraintTop_toBottomOf="@+id/userCity" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.tabs.TabLayout
@@ -95,7 +104,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tabLayout"
         android:background="@color/white"
-        Tools:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        Tools:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
 

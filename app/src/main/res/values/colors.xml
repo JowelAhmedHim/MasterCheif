@@ -10,4 +10,12 @@
     <color name="softRed">#F47174</color>
     <color name="lightGray">#eeeeee</color>
 
+    <color name="colorPrimary">#141A31</color>
+    <color name="colorPrimaryDark">#081029</color>
+    <color name="colorPrimaryLight">#101F4C</color>
+    <color name="colorTextPrimary">#CBD5ED</color>
+    <color name="colorTextSecondary">#4A5B82</color>
+    <color name="colorTextOther">#FAD303</color>
+    <color name="colorThemeExtra">#FF5252</color>
+
 </resources>

@@ -38,7 +38,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener {
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     //permission constants
     public static final int CAMERA_REQUEST_CODE = 100;
@@ -272,14 +272,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(SignUp.this, "Successfully SignUp", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, "Successfully SignUp", Toast.LENGTH_SHORT).show();
                         saveProfileIntoDatabase();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(SignUp.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
                 });
@@ -313,7 +313,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                         @Override
                         public void onSuccess(Void unused) {
                             progressDialog.dismiss();
-                            startActivity(new Intent(SignUp.this,MainActivity.class));
+                            startActivity(new Intent(SignUpActivity.this,MainActivity.class));
                             finish();
                         }
                     })
@@ -361,7 +361,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 progressDialog.dismiss();
-                                                startActivity(new Intent(SignUp.this,MainActivity.class));
+                                                startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
                                                 finish();
                                             }
                                         })

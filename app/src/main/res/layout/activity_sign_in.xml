@@ -9,38 +9,6 @@
     android:gravity="center_vertical"
     tools:context=".ui.activities.SignUpActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_baseline_person_24"
-        app:civ_border_color="@color/softRed"
-        app:civ_border_width="2dp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Enter Your Name"
-        app:hintTextColor="@color/colorTextSecondary"
-        android:textColorHint="@color/colorTextSecondary"
-        app:boxStrokeColor="@color/softRed"
-        app:boxStrokeWidthFocused="@dimen/_2sdp"
-        app:startIconDrawable="@drawable/ic_baseline_email_24"
-        app:startIconTint="@color/softRed"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/softRed">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_et"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/colorTextSecondary"
-            android:textCursorDrawable="@null"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutEmail"
@@ -91,35 +59,13 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutConfirmPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Confirm Password"
-        app:hintTextColor="@color/colorTextSecondary"
-        android:textColorHint="@color/colorTextSecondary"
-        app:boxStrokeColor="@color/softRed"
-        app:boxStrokeWidthFocused="@dimen/_2sdp"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24"
-        app:startIconTint="@color/softRed"
-        app:endIconMode="password_toggle"
-        app:endIconTint="@color/softRed">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/confirmPassword_et"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textPassword"
-            android:textColor="@color/colorTextSecondary"
-            android:textCursorDrawable="@null"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/signUp_btn"
+        android:id="@+id/signIn_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
-        android:text="SignUp"
+        android:text="SignIn"
         android:textAllCaps="false"/>
+
 </LinearLayout>

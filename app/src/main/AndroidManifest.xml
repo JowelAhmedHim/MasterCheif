@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.masterchef">
+    package="com.example.masterchef" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,10 +12,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MasterChef">
+        android:theme="@style/Theme.MasterChef" >
         <activity
-            android:name=".ui.activities.SignUp"
-
+            android:name=".ui.activities.AdminActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.activities.SignInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +26,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activities.SignUpActivity"
+            android:exported="true"/>
+        <activity
             android:name=".ui.activities.SettingActivity"
             android:exported="true" />
         <activity
@@ -31,9 +36,7 @@
             android:exported="true" />
         <activity
             android:name=".ui.activities.MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>

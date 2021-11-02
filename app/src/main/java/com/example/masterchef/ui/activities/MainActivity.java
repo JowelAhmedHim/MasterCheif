@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,9 +19,21 @@ import com.example.masterchef.ui.fragments.FavouriteFragment;
 import com.example.masterchef.ui.fragments.LeaderboardFragment;
 import com.example.masterchef.ui.fragments.ProfileFragment;
 import com.example.masterchef.ui.fragments.RecipesFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -32,11 +45,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
+    private FirebaseAuth auth;
+    private ProgressDialog progressDialog;
+
+
+    private String username,email,password;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        progressDialog = new ProgressDialog(this);
+        auth = FirebaseAuth.getInstance();
 
         //toolbar setup
         toolbar = findViewById(R.id.toolbar);
@@ -118,11 +141,82 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 break;
             case R.id.nav_logout:
+                makeOffline();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void makeOffline() {
+
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("online","false");
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.child(auth.getUid()).updateChildren(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        //update successfully
+                        auth.signOut();
+                        checkUser();
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
+    private void checkUser() {
+
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null){
+            startActivity(new Intent(MainActivity.this, SignInActivity.class));
+            finish();
+        }else {
+            loadMyInfo();
+        }
+    }
+
+    private void loadMyInfo() {
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.orderByChild("uid").equalTo(auth.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds: snapshot.getChildren()){
+                            //get user data
+                            String name = ""+ds.child("name").getValue();
+                            String email = ""+ds.child("email").getValue();
+                            String profileImage = ""+ds.child("profileImage").getValue();
+                            String accountType = ""+ds.child("accountType").getValue();
+
+//                            //set user data to view
+//                            userName.setText(name);
+//                            userEmail.setText(email);
+//                            try {
+//                                Picasso.get().load(profileImage).into(userImage);
+//
+//                            }catch (Exception e){
+//                                userImage.setImageResource(R.drawable.ic_baseline_person_24);
+//                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+
 
     @Override
     public void onBackPressed() {

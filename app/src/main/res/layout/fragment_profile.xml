@@ -58,7 +58,7 @@
             app:layout_constraintTop_toTopOf="@id/userImage" />
 
         <TextView
-            android:id="@+id/userCity"
+            android:id="@+id/userEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubontu_regular"
@@ -79,7 +79,7 @@
             android:maxLines="2"
             app:layout_constraintEnd_toEndOf="@+id/userName"
             app:layout_constraintStart_toStartOf="@+id/userName"
-            app:layout_constraintTop_toBottomOf="@+id/userCity" />
+            app:layout_constraintTop_toBottomOf="@+id/userEmail" />
 
 
 

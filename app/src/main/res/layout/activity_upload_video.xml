@@ -7,6 +7,7 @@
     tools:context=".ui.activities.UploadVideo">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
        <include
@@ -14,150 +15,156 @@
            layout="@layout/toolbar"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:padding="20dp">
-
-        <EditText
-            android:id="@+id/video_title"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edittext_background1"
-            android:hint="Video Title"
-            android:inputType="text"
-            android:maxLength="100"
-            android:padding="10dp" />
-
-        <EditText
-            android:id="@+id/video_description"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appbar">
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/video_title"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edittext_background1"
-            android:hint="Video Description"
-            android:inputType="textMultiLine"
-            android:maxLines="5"
-            android:minHeight="100dp"
-            android:padding="10dp"
-            android:scrollbars="vertical" />
+            android:padding="20dp">
 
-        <LinearLayout
-            android:id="@+id/linearlayout3"
-            android:layout_below="@+id/video_description"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:id="@+id/video_category"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
+            <EditText
+                android:id="@+id/video_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/edittext_background1"
-                android:gravity="center|start"
-                android:padding="10dp"
-                android:text="Category" />
-
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/video_title"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="6"
+                android:hint="Video Title"
+                android:inputType="text"
+                android:maxLength="100"
                 android:padding="10dp" />
 
-
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:id="@+id/linearlayout1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/linearlayout3"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:id="@+id/image_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:maxLines="1"
-                android:ellipsize="end"
+            <EditText
+                android:id="@+id/video_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/video_title"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/edittext_background1"
-                android:gravity="center|start"
+                android:hint="Video Description"
+                android:inputType="textMultiLine"
+                android:maxLines="5"
+                android:minHeight="100dp"
                 android:padding="10dp"
-                tools:text="jowel" />
+                android:scrollbars="vertical" />
+
+            <LinearLayout
+                android:id="@+id/linearlayout3"
+                android:layout_below="@+id/video_description"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:id="@+id/video_category"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@drawable/edittext_background1"
+                    android:gravity="center|start"
+                    android:padding="10dp"
+                    android:text="Category" />
+
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/video_title"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="6"
+                    android:padding="10dp" />
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/linearlayout1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/linearlayout3"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:id="@+id/image_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:background="@drawable/edittext_background1"
+                    android:gravity="center|start"
+                    android:padding="10dp"
+                    tools:text="jowel" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/image_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="4"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:backgroundTint="@color/softRed"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Select Image" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearlayout2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/linearlayout1"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:id="@+id/video_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:background="@drawable/edittext_background1"
+                    android:gravity="center|start"
+                    android:padding="10dp"
+                    tools:text="jowel" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/vide_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="4"
+                    android:backgroundTint="@color/softRed"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Select Video" />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/image_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_weight="4"
-                android:maxLines="1"
-                android:ellipsize="end"
+                android:id="@+id/upload"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@+id/linearlayout2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/softRed"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:text="Select Image" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearlayout2"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/linearlayout1"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:id="@+id/video_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:background="@drawable/edittext_background1"
-                android:gravity="center|start"
-                android:padding="10dp"
-                tools:text="jowel" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/vide_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_weight="4"
-                android:backgroundTint="@color/softRed"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:text="Select Video" />
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/upload"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_below="@+id/linearlayout2"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/softRed"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="Upload" />
+                android:text="Upload" />
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
 
 </RelativeLayout>

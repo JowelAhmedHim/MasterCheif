@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -34,14 +35,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.masterchef.R;
+import com.example.masterchef.ui.Validation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.security.Permission;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UploadVideo extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -65,24 +75,26 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     private Button upload,videoBtn,thumbnailBtn;
 
 
-
-    String videoTitle;
-    String videoDescription;
-    String videoCategory;
+    String videoTitle,videoDescription,videoCategory;
 
     Uri videoUri,thumbnailUri;
 
-    String currentUid;
-    StorageReference mStorageReference;
-    StorageTask mUploadTask;
-    DatabaseReference referenceVideos;
+    FirebaseAuth firebaseAuth;
 
 
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_video);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please wait...");
+        progressDialog.setCancelable(false);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -95,21 +107,18 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
             }
         });
 
-        init();
         initPermission();
+        init();
         spinnerFunction();
+
         videoBtn.setOnClickListener(this);
         thumbnailBtn.setOnClickListener(this);
 
-        videoTitle = videoNameEt.getText().toString();
-        videoDescription = videoDescriptionEt.getText().toString();
         upload.setOnClickListener(this);
-
-        dataValidation();
-
 
     }
 
+    //initialise view
     public void init(){
         videoNameEt = findViewById(R.id.video_title);
         videoDescriptionEt = findViewById(R.id.video_description);
@@ -119,11 +128,9 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         upload = findViewById(R.id.upload);
         videoBtn = findViewById(R.id.vide_btn);
         thumbnailBtn = findViewById(R.id.image_btn);
-
-
-
     }
 
+    //permission
     private void initPermission() {
         cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -167,17 +174,116 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
             case R.id.upload:
                 dataValidation();
                 break;
+
         }
 
     }
 
+    //check video upload validation
+    private void dataValidation() {
+
+        videoTitle = videoNameEt.getText().toString();
+        videoDescription = videoDescriptionEt.getText().toString();
+
+        if (TextUtils.isEmpty(videoTitle)){
+            Toast.makeText(this, "Need a title", Toast.LENGTH_SHORT).show();
+        }
+        else if (TextUtils.isEmpty(videoDescription)){
+            Toast.makeText(this, "Give a small description", Toast.LENGTH_SHORT).show();
+        }
+        else if (videoUri ==  null){
+            Toast.makeText(this, "Select a video to upload", Toast.LENGTH_SHORT).show();
+
+        }else {
+            uploadVideo();
+        }
+
+    }
+
+    //upload video on database
+    private void uploadVideo() {
+        progressDialog.setMessage("Video uploading...");
+        progressDialog.show();
+
+        String timestamp = ""+System.currentTimeMillis();
+
+        //video file path and file name in database
+        String videoFilename = "Videos/" + "video_"+ timestamp;
+
+        //save info with image
+        String  thumbnailFilename = "Thumbnails/"+""+firebaseAuth.getUid();
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference(videoFilename);
+        storageReference.putFile(videoUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        //video uploaded,get url of video
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!uriTask.isSuccessful());
+                        Uri downloadUri = uriTask.getResult();
+                        if (uriTask.isSuccessful()){
+                            //url of upload video is received
+                            //save video details to database
+
+                            HashMap<String,Object> hashMap = new HashMap<>();
+                            hashMap.put("videoTitle",""+videoTitle);
+                            hashMap.put("videoDescription",""+videoDescription);
+                            hashMap.put("videoCategory",""+videoCategory);
+                            hashMap.put("videoUrl",""+downloadUri);
+                            hashMap.put("videoLike","0");
+
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+                            reference.child(firebaseAuth.getUid()).child("Videos").child(timestamp).setValue(hashMap)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(getApplicationContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
+                                            clearData();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(getApplicationContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+    }
+
+    //clear ui data
+    private void clearData() {
+        videoNameEt.setText("");
+        videoDescriptionEt.setText("");
+        videoTv.setText("");
+        imageTv.setText("");
+        videoUri = null;
+        thumbnailUri = null;
+    }
+
+    //open file manager for video selecting
     public void openVideoFile(){
         startActivityForResult(Intent.createChooser(
                 new Intent(Intent.ACTION_GET_CONTENT)
                         .setType("video/*"), "Choose Video"),VIDEO_REQUEST_CODE);
 
     }
-
 
     // function for image picker dialog
     private void imagePicker() {
@@ -266,10 +372,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     }
 
 
-    private void dataValidation() {
-
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -345,6 +447,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         }
     }
 
+    //get file name from uri
     private void getImageFileName(Uri thumbnailUri) {
         String imageName = "";
         Cursor cursor = getContentResolver().query(thumbnailUri,null,null,null,null);

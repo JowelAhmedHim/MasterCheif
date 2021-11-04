@@ -3,6 +3,7 @@ package com.example.masterchef.ui;
 import android.content.Context;
 import android.util.Patterns;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -36,7 +37,7 @@ public class Validation {
        }
    }
 
-   public boolean emailValidation(EditText editText,TextInputLayout textInputLayout){
+    public boolean emailValidation(EditText editText,TextInputLayout textInputLayout){
        String value = editText.getText().toString();
        if (value.isEmpty()){
            textInputLayout.setError("Enter An Email");
@@ -51,7 +52,7 @@ public class Validation {
        }
    }
 
-   public boolean passwordValidation(EditText editText,TextInputLayout textInputLayout){
+    public boolean passwordValidation(EditText editText,TextInputLayout textInputLayout){
        String value = editText.getText().toString();
        String  passwordVal = "^" +
 //               "(?=.*[0-9])" + //at least one digit
@@ -74,7 +75,7 @@ public class Validation {
            return true;
        }
    }
-   public boolean passwordConfirmationValidation(EditText editText1,EditText editText2,TextInputLayout textInputLayout){
+    public boolean passwordConfirmationValidation(EditText editText1,EditText editText2,TextInputLayout textInputLayout){
        String value1 = editText1.getText().toString();
        String value2 = editText2.getText().toString();
 

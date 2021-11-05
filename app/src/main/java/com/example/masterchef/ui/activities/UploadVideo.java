@@ -115,6 +115,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         thumbnailBtn.setOnClickListener(this);
 
         upload.setOnClickListener(this);
+        spinner.setOnItemSelectedListener(this);
 
     }
 
@@ -191,6 +192,12 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         else if (TextUtils.isEmpty(videoDescription)){
             Toast.makeText(this, "Give a small description", Toast.LENGTH_SHORT).show();
         }
+        else if (TextUtils.isEmpty(videoCategory)){
+            Toast.makeText(this, "Select Video Category", Toast.LENGTH_SHORT).show();
+        }
+        else if (thumbnailUri == null){
+            Toast.makeText(this, "Select an thumbnail image", Toast.LENGTH_SHORT).show();
+        }
         else if (videoUri ==  null){
             Toast.makeText(this, "Select a video to upload", Toast.LENGTH_SHORT).show();
 
@@ -227,21 +234,44 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                             //url of upload video is received
                             //save video details to database
 
-                            HashMap<String,Object> hashMap = new HashMap<>();
-                            hashMap.put("videoTitle",""+videoTitle);
-                            hashMap.put("videoDescription",""+videoDescription);
-                            hashMap.put("videoCategory",""+videoCategory);
-                            hashMap.put("videoUrl",""+downloadUri);
-                            hashMap.put("videoLike","0");
-
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-                            reference.child(firebaseAuth.getUid()).child("Videos").child(timestamp).setValue(hashMap)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            //upload image
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference(thumbnailFilename);
+                            storageReference.putFile(thumbnailUri)
+                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                         @Override
-                                        public void onSuccess(Void unused) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(getApplicationContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
-                                            clearData();
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            //get url from upload image
+                                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                                            while (!uriTask.isSuccessful());
+                                            Uri downloadUri = uriTask.getResult();
+                                            if (uriTask.isSuccessful()){
+                                                HashMap<String,Object> hashMap = new HashMap<>();
+                                                hashMap.put("videoTitle",""+videoTitle);
+                                                hashMap.put("videoDescription",""+videoDescription);
+                                                hashMap.put("videoCategory",""+videoCategory);
+                                                hashMap.put("videoThumbnail",""+thumbnailUri);
+                                                hashMap.put("videoUrl",""+downloadUri);
+                                                hashMap.put("videoLike","0");
+
+                                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+                                                reference.child(firebaseAuth.getUid()).child("Videos").child(timestamp).setValue(hashMap)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void unused) {
+                                                                progressDialog.dismiss();
+                                                                Toast.makeText(getApplicationContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
+                                                                clearData();
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                progressDialog.dismiss();
+                                                                Toast.makeText(getApplicationContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                            }
+
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -251,6 +281,8 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                             Toast.makeText(getApplicationContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
+
+
 
 
                         }

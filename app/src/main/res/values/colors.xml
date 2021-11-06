@@ -18,4 +18,6 @@
     <color name="colorTextOther">#FAD303</color>
     <color name="colorThemeExtra">#FF5252</color>
 
+    <color name="grey_40">#999999</color>
+
 </resources>

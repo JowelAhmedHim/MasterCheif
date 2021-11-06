@@ -11,6 +11,6 @@
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-     tools:listitem="@layout/user_video_items"/>
+     tools:listitem="@layout/row_user_video_item"/>
 
 </RelativeLayout>

@@ -30,7 +30,7 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.user_video_items,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.row_user_video_item,parent,false);
         MyViewHolder vh = new MyViewHolder(view);
         return vh;
     }

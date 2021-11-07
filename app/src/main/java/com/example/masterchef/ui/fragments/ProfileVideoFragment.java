@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.masterchef.R;
 import com.example.masterchef.services.model.ModelVideo;
@@ -36,6 +37,8 @@ public class ProfileVideoFragment extends Fragment {
     private AdapterVideo adapterVideo;
     private ProgressDialog progressDialog;
 
+    private TextView emptyState;
+
     public ProfileVideoFragment(String mTitle) {
         // Required empty public constructor
         this.title = mTitle;
@@ -53,6 +56,7 @@ public class ProfileVideoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        emptyState = view.findViewById(R.id.emptyState);
         firebaseAuth = FirebaseAuth.getInstance();
         recyclerViewUserVideos = view.findViewById(R.id.recyclerViewUserVideos);
         loadAllVideos();
@@ -62,26 +66,38 @@ public class ProfileVideoFragment extends Fragment {
     private void loadAllVideos() {
         videoArrayList = new ArrayList<>();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-        databaseReference.child(firebaseAuth.getUid()).child("Videos")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        videoArrayList.clear();
-                        for (DataSnapshot ds : snapshot.getChildren()){
-                            ModelVideo modelVideo = ds.getValue(ModelVideo.class);
-                            videoArrayList.add(modelVideo);
-                        }
-
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("VideoPosts");
+        databaseReference.orderByChild("uid").equalTo(firebaseAuth.getUid())
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    videoArrayList.clear();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()){
+                        ModelVideo modelVideo = ds.getValue(ModelVideo.class);
+                        videoArrayList.add(modelVideo);
+                    }
+                    if (videoArrayList.isEmpty()){
+                        recyclerViewUserVideos.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.VISIBLE);
+                    }else {
+                        recyclerViewUserVideos.setVisibility(View.VISIBLE);
+                        emptyState.setVisibility(View.GONE);
                         //setup adapter
                         adapterVideo = new AdapterVideo(getContext(),videoArrayList);
                         recyclerViewUserVideos.setAdapter(adapterVideo);
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
     }
 }

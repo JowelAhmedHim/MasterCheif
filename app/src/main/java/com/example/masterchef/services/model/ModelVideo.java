@@ -2,27 +2,25 @@ package com.example.masterchef.services.model;
 
 public class ModelVideo {
 
-    private String videoId,videoTitle,videDescription,videoCategory,videoLike,videoThumbnail,uid;
+    private String videoTitle,videDescription,videoCategory,videoThumbnail,videoUrl,videoLike,timeStamp,
+            uid,userName,userEmail,userImage;
 
     public ModelVideo() {
     }
 
-    public ModelVideo(String videoId, String videoTitle, String videDescription, String videoCategory, String videoLike, String videoThumbnail, String uid) {
-        this.videoId = videoId;
+
+    public ModelVideo(String videoTitle, String videDescription, String videoCategory, String videoThumbnail, String videoUrl, String videoLike, String timeStamp, String uid, String userName, String userEmail, String userImage) {
         this.videoTitle = videoTitle;
         this.videDescription = videDescription;
         this.videoCategory = videoCategory;
-        this.videoLike = videoLike;
         this.videoThumbnail = videoThumbnail;
+        this.videoUrl = videoUrl;
+        this.videoLike = videoLike;
+        this.timeStamp = timeStamp;
         this.uid = uid;
-    }
-
-    public String getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(String videoId) {
-        this.videoId = videoId;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userImage = userImage;
     }
 
     public String getVideoTitle() {
@@ -49,14 +47,6 @@ public class ModelVideo {
         this.videoCategory = videoCategory;
     }
 
-    public String getVideoLike() {
-        return videoLike;
-    }
-
-    public void setVideoLike(String videoLike) {
-        this.videoLike = videoLike;
-    }
-
     public String getVideoThumbnail() {
         return videoThumbnail;
     }
@@ -65,11 +55,59 @@ public class ModelVideo {
         this.videoThumbnail = videoThumbnail;
     }
 
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getVideoLike() {
+        return videoLike;
+    }
+
+    public void setVideoLike(String videoLike) {
+        this.videoLike = videoLike;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
     public String getUid() {
         return uid;
     }
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
     }
 }

@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //update successfully
                         auth.signOut();
                         checkUser();
-                        finish();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

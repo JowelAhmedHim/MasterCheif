@@ -39,7 +39,7 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //get data
         ModelVideo modelVideo = videoList.get(position);
-        String videoId = modelVideo.getVideoId();
+        String videoId = modelVideo.getTimeStamp();
         String uid = modelVideo.getUid();
         String videTitle = modelVideo.getVideoTitle();
         String videDescription = modelVideo.getVideDescription();

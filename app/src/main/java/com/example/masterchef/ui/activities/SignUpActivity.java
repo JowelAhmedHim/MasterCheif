@@ -54,7 +54,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     //widget
     private TextInputLayout lay_username,lay_email,lay_password,lay_confirmPassword;
     private TextInputEditText usernameEt,emailEt,passwordEt,confirmPassEt;
-    private MaterialButton signUpBtn;
+    private MaterialButton signUpBtn,signInBtn;
     private ImageView profileImage;
 
     //strings
@@ -85,6 +85,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         init();
 
         signUpBtn.setOnClickListener(this);
+        signInBtn.setOnClickListener(this);
         profileImage.setOnClickListener(this);
 
 
@@ -108,6 +109,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         confirmPassEt = findViewById(R.id.confirmPassword_et);
         signUpBtn = findViewById(R.id.signUp_btn);
         profileImage = findViewById(R.id.profile_image);
+        signInBtn = findViewById(R.id.signIn_btn);
 
     }
 
@@ -116,6 +118,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()){
             case R.id.signUp_btn:
                 inputValidation();
+                break;
+            case R.id.signIn_btn:
+                startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
+                finish();
                 break;
             case R.id.profile_image:
                 imagePickerDialog();

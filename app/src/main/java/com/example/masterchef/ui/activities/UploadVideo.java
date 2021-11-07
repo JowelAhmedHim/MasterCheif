@@ -40,8 +40,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -68,18 +73,20 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
     private String[] cameraPermission;
     private String[] storagePermission;
-    Toolbar toolbar;
+    private Toolbar toolbar;
     private EditText videoNameEt,videoDescriptionEt;
     private Spinner spinner ;
     private TextView imageTv,videoTv;
     private Button upload,videoBtn,thumbnailBtn;
 
 
-    String videoTitle,videoDescription,videoCategory;
+    private String videoTitle,videoDescription,videoCategory;
+    private String userName,userEmail,userImage;
 
-    Uri videoUri,thumbnailUri;
+    private Uri videoUri,thumbnailUri;
 
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
+
 
 
     private ProgressDialog progressDialog;
@@ -95,7 +102,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Video Upload");
@@ -110,6 +116,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         initPermission();
         init();
         spinnerFunction();
+        getUserInfo();
 
         videoBtn.setOnClickListener(this);
         thumbnailBtn.setOnClickListener(this);
@@ -117,6 +124,26 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         upload.setOnClickListener(this);
         spinner.setOnItemSelectedListener(this);
 
+    }
+
+    private void getUserInfo() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        Query query = reference.orderByChild("uid").equalTo(firebaseAuth.getUid());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               for (DataSnapshot ds: dataSnapshot.getChildren()){
+                    userName = ""+ds.child("name").getValue();
+                    userEmail = ""+ds.child("email").getValue();
+                    userImage = ""+ds.child("profileImage").getValue();
+               }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     //initialise view
@@ -219,6 +246,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
         //save info with image
         String  thumbnailFilename = "Thumbnails/"+""+firebaseAuth.getUid();
+        String timeStamp = ""+System.currentTimeMillis();
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(videoFilename);
         storageReference.putFile(videoUri)
@@ -246,15 +274,22 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                             Uri downloadUri = uriTask.getResult();
                                             if (uriTask.isSuccessful()){
                                                 HashMap<String,Object> hashMap = new HashMap<>();
+
                                                 hashMap.put("videoTitle",""+videoTitle);
                                                 hashMap.put("videoDescription",""+videoDescription);
                                                 hashMap.put("videoCategory",""+videoCategory);
                                                 hashMap.put("videoThumbnail",""+thumbnailUri);
                                                 hashMap.put("videoUrl",""+downloadUri);
                                                 hashMap.put("videoLike","0");
+                                                hashMap.put("timeStamp",""+timeStamp);
+                                                hashMap.put("uid",""+firebaseAuth.getUid());
+                                                hashMap.put("userName",""+userName);
+                                                hashMap.put("userEmail",""+userEmail);
+                                                hashMap.put("userImage",""+userImage);
 
-                                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-                                                reference.child(firebaseAuth.getUid()).child("Videos").child(timestamp).setValue(hashMap)
+
+                                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("VideoPosts");
+                                                reference.child(timestamp).setValue(hashMap)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void unused) {

@@ -122,4 +122,11 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:text="SignUp"
         android:textAllCaps="false"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signIn_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="SignIn"
+        android:textAllCaps="false"/>
 </LinearLayout>

@@ -13,4 +13,12 @@
      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
      tools:listitem="@layout/row_user_video_item"/>
 
+ <TextView
+     android:id="@+id/emptyState"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:visibility="gone"
+     android:text="you have no video"
+     android:layout_centerInParent="true"/>
+
 </RelativeLayout>

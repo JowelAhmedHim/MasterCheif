@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseUser user = auth.getCurrentUser();
         if (user == null){
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
-            finish();
         }else {
             loadMyInfo();
         }

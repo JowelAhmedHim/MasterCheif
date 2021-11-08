@@ -59,6 +59,7 @@ public class ProfileVideoFragment extends Fragment {
         emptyState = view.findViewById(R.id.emptyState);
         firebaseAuth = FirebaseAuth.getInstance();
         recyclerViewUserVideos = view.findViewById(R.id.recyclerViewUserVideos);
+        recyclerViewUserVideos.setHasFixedSize(true);
         loadAllVideos();
 
     }

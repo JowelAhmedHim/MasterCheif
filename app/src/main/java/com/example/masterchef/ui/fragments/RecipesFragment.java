@@ -52,6 +52,7 @@ public class RecipesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
 
         //show newest post first
         linearLayoutManager.setStackFromEnd(true);

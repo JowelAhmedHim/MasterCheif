@@ -2,14 +2,15 @@ package com.example.masterchef.services.model;
 
 public class ModelVideo {
 
-    private String videoTitle,videDescription,videoCategory,videoThumbnail,videoUrl,videoLike,timeStamp,
+    private String postId,videoTitle,videDescription,videoCategory,videoThumbnail,videoUrl,videoLike,timeStamp,
             uid,userName,userEmail,userImage;
 
     public ModelVideo() {
     }
 
 
-    public ModelVideo(String videoTitle, String videDescription, String videoCategory, String videoThumbnail, String videoUrl, String videoLike, String timeStamp, String uid, String userName, String userEmail, String userImage) {
+    public ModelVideo(String postId, String videoTitle, String videDescription, String videoCategory, String videoThumbnail, String videoUrl, String videoLike, String timeStamp, String uid, String userName, String userEmail, String userImage) {
+        this.postId = postId;
         this.videoTitle = videoTitle;
         this.videDescription = videDescription;
         this.videoCategory = videoCategory;
@@ -21,6 +22,14 @@ public class ModelVideo {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userImage = userImage;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 
     public String getVideoTitle() {

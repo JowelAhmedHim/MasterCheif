@@ -274,7 +274,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                             Uri downloadUri = uriTask.getResult();
                                             if (uriTask.isSuccessful()){
                                                 HashMap<String,Object> hashMap = new HashMap<>();
-
+                                                hashMap.put("postId",""+timeStamp);
                                                 hashMap.put("videoTitle",""+videoTitle);
                                                 hashMap.put("videoDescription",""+videoDescription);
                                                 hashMap.put("videoCategory",""+videoCategory);

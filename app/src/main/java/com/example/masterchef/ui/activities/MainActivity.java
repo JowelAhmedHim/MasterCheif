@@ -140,9 +140,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_logout:
-                makeOffline();
+            case R.id.nav_logout:auth.signOut();
+                Intent intent1 = new Intent(MainActivity.this, SignInActivity.class);
+                startActivity(intent1);
                 break;
+
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

@@ -12,24 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="20dp">
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/nav_header_photo"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_gravity="left"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_baseline_person_24"
+            android:layout_gravity="left"
+            android:src="@drawable/recipedefault"
             app:civ_border_color="@color/white"
             app:civ_border_width="2dp" />
+
         <TextView
             android:id="@+id/nav_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/nav_header_photo"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:text="Jowel Ahmed"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"/>
+            android:layout_toEndOf="@+id/nav_header_photo"
+            android:text="Master Chief"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
 
     </RelativeLayout>

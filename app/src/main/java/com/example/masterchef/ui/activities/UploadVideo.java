@@ -257,7 +257,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                         //video uploaded,get url of video
                         Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                         while (!uriTask.isSuccessful());
-                        Uri downloadUri = uriTask.getResult();
+                        Uri downloadVideoUri = uriTask.getResult();
                         if (uriTask.isSuccessful()){
                             //url of upload video is received
                             //save video details to database
@@ -271,15 +271,15 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                             //get url from upload image
                                             Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                                             while (!uriTask.isSuccessful());
-                                            Uri downloadUri = uriTask.getResult();
+                                            Uri downloadImageUri = uriTask.getResult();
                                             if (uriTask.isSuccessful()){
                                                 HashMap<String,Object> hashMap = new HashMap<>();
                                                 hashMap.put("postId",""+timeStamp);
                                                 hashMap.put("videoTitle",""+videoTitle);
                                                 hashMap.put("videoDescription",""+videoDescription);
                                                 hashMap.put("videoCategory",""+videoCategory);
-                                                hashMap.put("videoThumbnail",""+thumbnailUri);
-                                                hashMap.put("videoUrl",""+downloadUri);
+                                                hashMap.put("videoThumbnail",""+downloadImageUri);
+                                                hashMap.put("videoUrl",""+downloadVideoUri);
                                                 hashMap.put("videoLike","0");
                                                 hashMap.put("timeStamp",""+timeStamp);
                                                 hashMap.put("uid",""+firebaseAuth.getUid());

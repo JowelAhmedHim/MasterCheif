@@ -89,6 +89,8 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
 
 
+
+
     private ProgressDialog progressDialog;
 
     @Override
@@ -246,7 +248,13 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
         //save info with image
         String  thumbnailFilename = "Thumbnails/"+""+firebaseAuth.getUid();
-        String timeStamp = ""+System.currentTimeMillis();
+
+        Long time = System.currentTimeMillis();
+        String timeStamp = ""+time;
+
+
+
+
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(videoFilename);
         storageReference.putFile(videoUri)
@@ -261,6 +269,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                         if (uriTask.isSuccessful()){
                             //url of upload video is received
                             //save video details to database
+
 
                             //upload image
                             StorageReference storageReference = FirebaseStorage.getInstance().getReference(thumbnailFilename);

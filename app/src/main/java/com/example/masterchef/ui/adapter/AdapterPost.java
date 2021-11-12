@@ -67,15 +67,19 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         ModelVideo modelPosts = postList.get(i);
 
         //get data
+
+
         String videoId = modelPosts.getPostId();
         String videoTitle = modelPosts.getVideoTitle();
-        String videoDescription = modelPosts.getVideDescription();
+        String videoDescription = modelPosts.getVideoDescription();
+        String videoCategory = modelPosts.getVideoCategory();
+        String videoUri = modelPosts.getVideoUrl();
         String videLike = modelPosts.getVideoLike();
         String userId = modelPosts.getUid();
         String userName = modelPosts.getUserName();
         String userEmail = modelPosts.getUserEmail();
-        String videoThumbnail = modelPosts.getVideoThumbnail();
-        String userImage = modelPosts.getUserImage();
+        String videoThumbnailUri = modelPosts.getVideoThumbnail();
+        String userImageUri = modelPosts.getUserImage();
         String videTimeStamp = modelPosts.getTimeStamp();
 
 //        //convert timestamp to dd/mm/yyyy hh:mm ap/pm
@@ -94,8 +98,8 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         setLikes(myViewHolder,videoId);
 
         try {
-            Picasso.get().load(videoThumbnail).into(myViewHolder.videoThumbnail);
-            Picasso.get().load(userImage).into(myViewHolder.userImage);
+            Picasso.get().load(videoThumbnailUri).into(myViewHolder.videoThumbnail);
+            Picasso.get().load(userImageUri).into(myViewHolder.userImage);
         }catch (Exception e){
             myViewHolder.videoThumbnail.setImageResource(R.drawable.food);
             myViewHolder.userImage.setImageResource(R.drawable.ic_baseline_person_24);

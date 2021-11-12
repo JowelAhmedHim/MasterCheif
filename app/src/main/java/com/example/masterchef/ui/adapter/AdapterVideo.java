@@ -59,13 +59,18 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //get data
         ModelVideo modelVideo = videoList.get(position);
-        String videoId = modelVideo.getTimeStamp();
-        String uid = modelVideo.getUid();
+        String videoId = modelVideo.getPostId();
         String videTitle = modelVideo.getVideoTitle();
-        String videDescription = modelVideo.getVideDescription();
+        String videDescription = modelVideo.getVideoDescription();
         String videoCategory = modelVideo.getVideoCategory();
         String videoThumbnailUri = modelVideo.getVideoThumbnail();
         String videoUri = modelVideo.getVideoUrl();
+        String videoTimestamp = modelVideo.getTimeStamp();
+        String videoLike = modelVideo.getVideoLike();
+        String uid = modelVideo.getUid();
+        String userName = modelVideo.getUserName();
+        String userEmail = modelVideo.getUserEmail();
+        String userImage = modelVideo.getUserImage();
 
         //set data
         holder.videoTitle.setText(videTitle);

@@ -8,11 +8,14 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.masterchef.R;
 import com.example.masterchef.ui.fragments.FavouriteFragment;
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private String username,email,password;
+    private long backPressedTime;
 
 
 
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //toolbar setup
         toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         //drawerLayout SetUp
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -140,9 +144,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_logout:auth.signOut();
-                Intent intent1 = new Intent(MainActivity.this, SignInActivity.class);
-                startActivity(intent1);
+            case R.id.nav_logout:
+                makeOffline();
                 break;
 
         }
@@ -163,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //update successfully
                         auth.signOut();
                         checkUser();
+                        finish();
 
                     }
                 })
@@ -178,7 +182,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FirebaseUser user = auth.getCurrentUser();
         if (user == null){
-            startActivity(new Intent(MainActivity.this, SignInActivity.class));
+            startActivity(new Intent(MainActivity.this, AppInfo.class));
+            finish();
         }else {
             loadMyInfo();
         }
@@ -224,8 +229,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawerLayout.isDrawerOpen(GravityCompat.START))
         {
             drawerLayout.closeDrawer(GravityCompat.START);
-        }else{
-            super.onBackPressed();
+        }
+        else{
+            AlertDialog.Builder alertdialog = new AlertDialog.Builder(this);
+            alertdialog.setTitle("Do you want to exit?");
+            alertdialog.setPositiveButton("Yes", (dialog, which) -> {
+                super.onBackPressed();
+            });
+            alertdialog.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+            AlertDialog alertDialog =alertdialog.create();
+            alertDialog.show();
+
         }
 
     }

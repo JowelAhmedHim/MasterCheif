@@ -112,7 +112,7 @@
                     android:layout_weight="4"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:backgroundTint="@color/softRed"
+                    android:backgroundTint="@color/salmon"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:text="Select Image" />
@@ -143,7 +143,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_weight="4"
-                    android:backgroundTint="@color/softRed"
+                    android:backgroundTint="@color/salmon"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:text="Select Video" />
@@ -156,7 +156,7 @@
                 android:layout_below="@+id/linearlayout2"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:backgroundTint="@color/softRed"
+                android:backgroundTint="@color/salmon"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:text="Upload" />

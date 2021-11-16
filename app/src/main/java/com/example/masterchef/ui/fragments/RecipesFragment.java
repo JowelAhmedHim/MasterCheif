@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.masterchef.R;
 
+import com.example.masterchef.services.listener.PostListener;
 import com.example.masterchef.services.model.ModelVideo;
 import com.example.masterchef.ui.adapter.AdapterPost;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class RecipesFragment extends Fragment {
+public class RecipesFragment extends Fragment implements PostListener {
 
     private FirebaseAuth firebaseAuth;
     private RecyclerView recyclerView;
@@ -85,10 +86,11 @@ public class RecipesFragment extends Fragment {
                     postList.add(modelPost);
 
                     //adapter
-                    adapterPost = new AdapterPost(getContext(),postList);
+                    adapterPost = new AdapterPost(getActivity(),postList);
 
                     //setAdapter to recyclerview
                     recyclerView.setAdapter(adapterPost);
+
 
                 }
             }
@@ -98,5 +100,10 @@ public class RecipesFragment extends Fragment {
                 Toast.makeText(getContext(), ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onPostClicked(ModelVideo modelVideo) {
+
     }
 }

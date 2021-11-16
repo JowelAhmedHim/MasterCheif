@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.masterchef.R;
 
+import com.example.masterchef.services.listener.PostListener;
 import com.example.masterchef.services.model.ModelVideo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,11 +32,14 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
 
     private Context context;
     private ArrayList<ModelVideo> postList;
+    private LayoutInflater layoutInflater;
+    private PostListener postListener;
 
 
     String myUid;
 
     private DatabaseReference likeRef;
+    private DatabaseReference userRef;
     private DatabaseReference postRef;
 
     boolean mVideoLike = false;
@@ -43,22 +47,28 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
 
 
 
-    public AdapterPost(Context context, ArrayList<ModelVideo> postList) {
+    public AdapterPost(Context context, ArrayList<ModelVideo> postList ) {
         this.context = context;
         this.postList = postList;
+
 
         myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
         postRef = FirebaseDatabase.getInstance().getReference().child("VideoPosts");
+        userRef = FirebaseDatabase.getInstance().getReference("Users");
 
     }
+
+
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.row_timeline_item,viewGroup,false);
-        MyViewHolder vh = new MyViewHolder(view);
-        return vh;
+       if (layoutInflater == null){
+           layoutInflater = LayoutInflater.from(context);
+       }
+       View view = layoutInflater.inflate(R.layout.row_timeline_item,viewGroup,false);
+       return new MyViewHolder(view);
     }
 
     @Override
@@ -78,20 +88,21 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         String userId = modelPosts.getUid();
         String userName = modelPosts.getUserName();
         String userEmail = modelPosts.getUserEmail();
+        String userPopularity = modelPosts.getUserPopularity();
         String videoThumbnailUri = modelPosts.getVideoThumbnail();
         String userImageUri = modelPosts.getUserImage();
         String videTimeStamp = modelPosts.getTimeStamp();
 
-//        //convert timestamp to dd/mm/yyyy hh:mm ap/pm
-//        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-//        calendar.setTimeInMillis(Long.parseLong(videTimeStamp));
-//        String time = DateFormat.format("dd/MM/yyy hh:mm aa",calendar).toString();
+        //convert timestamp to dd/mm/yyyy hh:mm ap/pm
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.setTimeInMillis(Long.parseLong(videTimeStamp));
+        String time = DateFormat.format("dd/MM/yyy hh:mm aa",calendar).toString();
 
         //set data
         myViewHolder.videTitle.setText(videoTitle);
         myViewHolder.videoDescription.setText(videoDescription);
         myViewHolder.videoLikeTxt.setText(videLike);
-//        myViewHolder.videoTime.setText(time);
+        myViewHolder.videoTime.setText(time);
         myViewHolder.userName.setText(userName);
         myViewHolder.userCity.setText(userEmail);
 
@@ -105,10 +116,12 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             myViewHolder.userImage.setImageResource(R.drawable.ic_baseline_person_24);
         }
 
+
         myViewHolder.videoLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final int videoPostLike = Integer.parseInt(videLike);
+
                 mVideoLike = true;
 
                 //get id of post clicked
@@ -120,9 +133,14 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
                             if (dataSnapshot.child(videoPostId).hasChild(myUid)){
                                 //already liked, so remove like
                                 postRef.child(videoPostId).child("videoLike").setValue(""+(videoPostLike-1));
+//                                postRef.child(videoPostId).child("userPopularity").setValue(""+(p-1));
                                 likeRef.child(videoPostId).child(myUid).removeValue();
+//                                userRef.child(modelPosts.getUid()).child("popularity").setValue(""+(p-1));
+
                             }else {
                                 postRef.child(videoPostId).child("videoLike").setValue(""+(videoPostLike+1));
+//                                postRef.child(videoPostId).child("userPopularity").setValue(""+(p+1));
+//                                userRef.child(modelPosts.getUid()).child("popularity").setValue(""+(p+1));
                                 likeRef.child(videoPostId).child(myUid).setValue("Liked");
                             }
                             mVideoLike = false;
@@ -182,6 +200,8 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             videoLikeBtn = itemView.findViewById(R.id.video_like_btn);
 
         }
+
+
     }
 
 }

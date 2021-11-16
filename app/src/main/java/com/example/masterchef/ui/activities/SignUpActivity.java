@@ -67,6 +67,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private Uri imageUri;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         init();
 
         signUpBtn.setOnClickListener(this);
-        signInBtn.setOnClickListener(this);
         profileImage.setOnClickListener(this);
 
 
@@ -107,9 +108,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         emailEt = findViewById(R.id.email_et);
         passwordEt = findViewById(R.id.password_et);
         confirmPassEt = findViewById(R.id.confirmPassword_et);
-        signUpBtn = findViewById(R.id.signUp_btn);
         profileImage = findViewById(R.id.profile_image);
-        signInBtn = findViewById(R.id.signIn_btn);
+        signUpBtn = findViewById(R.id.signUp_btn);
 
     }
 
@@ -118,10 +118,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()){
             case R.id.signUp_btn:
                 inputValidation();
-                break;
-            case R.id.signIn_btn:
-                startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
-                finish();
                 break;
             case R.id.profile_image:
                 imagePickerDialog();
@@ -306,6 +302,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             hashMap.put("uid",""+firebaseAuth.getUid());
             hashMap.put("email",""+email);
             hashMap.put("name",""+username);
+            hashMap.put("popularity","0");
             hashMap.put("online","true");
             hashMap.put("timestamp",""+timeStamp);
             hashMap.put("accountType","user");
@@ -354,6 +351,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 hashMap.put("uid",""+firebaseAuth.getUid());
                                 hashMap.put("email",""+email);
                                 hashMap.put("name",""+username);
+//                                hashMap.put("popularity","0");
                                 hashMap.put("online","true");
                                 hashMap.put("timestamp",""+timeStamp);
                                 hashMap.put("accountType","user");
@@ -367,7 +365,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 progressDialog.dismiss();
-                                                startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
+                                                startActivity(new Intent(SignUpActivity.this,MainActivity.class));
                                                 finish();
                                             }
                                         })
@@ -392,6 +390,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         }
     }
+
 
 
 }

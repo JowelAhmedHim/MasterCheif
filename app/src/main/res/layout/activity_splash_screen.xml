@@ -8,13 +8,12 @@
     android:gravity="bottom|center"
     tools:context=".ui.activities.SplashScreen">
 
-<ProgressBar
-    android:progressTint="#02b3b9"
-    android:id="@+id/Pbar"
-    android:layout_margin="@dimen/_80sdp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    style="@android:style/Widget.ProgressBar.Horizontal"
-/>
+    <ProgressBar
+        android:id="@+id/Pbar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_80sdp"
+        android:progressTint="@color/salmon" />
 
 </LinearLayout>

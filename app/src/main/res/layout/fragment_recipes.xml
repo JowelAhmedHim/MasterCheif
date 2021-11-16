@@ -10,7 +10,8 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/row_timeline_item"/>
+        tools:listitem="@layout/row_timeline_item"
+        android:layout_marginBottom="@dimen/_50sdp"/>
 
 
 

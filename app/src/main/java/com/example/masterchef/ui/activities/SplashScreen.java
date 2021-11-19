@@ -50,10 +50,12 @@ for(progress=20; progress<=100;progress=progress+20){
     } catch (InterruptedException e) {
         e.printStackTrace();
     }
+    //cheak the splash screen
 
 
 }
     }
+    //
     private void goMethod() {
 
         Intent intent=new Intent(SplashScreen.this, SignInActivity.class);

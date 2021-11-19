@@ -5,7 +5,7 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#E91E63</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="softRed">#F47174</color>
     <color name="lightGray">#eeeeee</color>
@@ -17,6 +17,7 @@
     <color name="colorTextSecondary">#4A5B82</color>
     <color name="colorTextOther">#FAD303</color>
     <color name="colorThemeExtra">#FF5252</color>
+    <color name="textcolor">#000000</color>
 
     <color name="grey_40">#999999</color>
 

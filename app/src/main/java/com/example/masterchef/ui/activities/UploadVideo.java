@@ -81,11 +81,12 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
 
     private String videoTitle,videoDescription,videoCategory;
-    private String userName,userEmail,userImage;
+    private String userName,userEmail,userImage,userPopularity;
 
     private Uri videoUri,thumbnailUri;
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
 
 
 
@@ -138,6 +139,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                     userName = ""+ds.child("name").getValue();
                     userEmail = ""+ds.child("email").getValue();
                     userImage = ""+ds.child("profileImage").getValue();
+                    userPopularity = ""+ds.child("popularity").getValue();
                }
             }
 
@@ -250,7 +252,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         String  thumbnailFilename = "Thumbnails/"+""+firebaseAuth.getUid();
 
         Long time = System.currentTimeMillis();
-        String timeStamp = ""+time;
+        final String timeStamp = ""+time;
 
 
 
@@ -282,8 +284,12 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                             while (!uriTask.isSuccessful());
                                             Uri downloadImageUri = uriTask.getResult();
                                             if (uriTask.isSuccessful()){
+
+                                                databaseReference = FirebaseDatabase.getInstance().getReference("VideoPosts");
+                                                String getKey = databaseReference.push().getKey();
+
                                                 HashMap<String,Object> hashMap = new HashMap<>();
-                                                hashMap.put("postId",""+timeStamp);
+                                                hashMap.put("postId",""+getKey);
                                                 hashMap.put("videoTitle",""+videoTitle);
                                                 hashMap.put("videoDescription",""+videoDescription);
                                                 hashMap.put("videoCategory",""+videoCategory);
@@ -295,10 +301,12 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                                 hashMap.put("userName",""+userName);
                                                 hashMap.put("userEmail",""+userEmail);
                                                 hashMap.put("userImage",""+userImage);
+//                                                hashMap.put("userPopularity",""+userPopularity);
 
 
-                                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("VideoPosts");
-                                                reference.child(timestamp).setValue(hashMap)
+
+
+                                                databaseReference.child(getKey).setValue(hashMap)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void unused) {

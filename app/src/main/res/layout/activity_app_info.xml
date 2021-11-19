@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_10sdp"
+    android:gravity="center"
+    tools:context=".ui.activities.AppInfo">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="@color/salmon"
+        android:fontFamily="@font/ubuntu_bold"
+        android:textSize="@dimen/_25sdp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/appDetails"
+        android:textSize="@dimen/_12sdp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/ubuntu_medium"
+        android:textColor="@color/salmon"
+        android:justificationMode="inter_word"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp"
+        android:src="@drawable/recipedefault"
+        android:padding="@dimen/_10sdp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signUp_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/salmon"
+        android:textColor="@color/white"
+        android:text="SIGN UP"
+        android:fontFamily="@font/ubuntu_medium"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:gravity="end"
+            android:fontFamily="@font/ubuntu_regular"
+            android:text="Already a member ?"/>
+        <TextView
+            android:id="@+id/signIn_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SIGN IN"
+            android:textColor="@color/salmon"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:gravity="end"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MasterChef">
         <activity
+            android:name=".ui.activities.AppInfo"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.SignInActivity"
             android:exported="true" />
         <activity

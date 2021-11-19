@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:Tools="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_details"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_4sdp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:padding="@dimen/_4sdp">
 
         <View
             android:id="@+id/viewSupporter"
@@ -26,14 +25,12 @@
             android:background="@drawable/background_tv_show"
             android:paddingBottom="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/userName"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout_editor_absoluteX="5dp" />
+            app:layout_constraintTop_toTopOf="@+id/userName" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userImage"
             android:layout_width="@dimen/_70sdp"
-            android:layout_height="@dimen/_100sdp"
+            android:layout_height="@dimen/_70sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:scaleType="centerCrop"
             app:civ_border_width="2dp"
@@ -51,7 +48,7 @@
             android:layout_marginEnd="@dimen/_8sdp"
             android:includeFontPadding="false"
             android:paddingTop="@dimen/_8sdp"
-            android:text="Jowel"
+            tools:text="Jowel Ahmed"
             android:textColor="@color/colorTextPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userImage"
@@ -61,26 +58,13 @@
             android:id="@+id/userEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubontu_regular"
-            android:text="Dhaka"
+            android:fontFamily="@font/ubuntu_regular"
+            tools:text="Abc@gmail.cm"
             android:textColor="@color/colorTextOther"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintEnd_toEndOf="@+id/userName"
             app:layout_constraintStart_toStartOf="@+id/userName"
             app:layout_constraintTop_toBottomOf="@+id/userName" />
-        <TextView
-            android:id="@+id/userDetails"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubontu_regular"
-            android:text=" I am Jowel Ahmed him. A professional cheif "
-            android:textColor="@color/colorTextSecondary"
-            android:textSize="@dimen/_12sdp"
-            android:maxLines="2"
-            app:layout_constraintEnd_toEndOf="@+id/userName"
-            app:layout_constraintStart_toStartOf="@+id/userName"
-            app:layout_constraintTop_toBottomOf="@+id/userEmail" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -94,9 +78,9 @@
         android:background="@color/white"
         Tools:tabGravity="fill"
         Tools:tabIndicatorHeight="4dp"
-        Tools:tabIndicatorColor="@color/softRed"
+        Tools:tabIndicatorColor="@color/salmon"
         Tools:tabMode="fixed"
-        Tools:tabTextColor="@color/softRed"/>
+        Tools:tabTextColor="@color/salmon"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"

@@ -9,71 +9,89 @@
     android:gravity="center_vertical"
     tools:context=".ui.activities.SignUpActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Welcome,"
+        android:textColor="@color/salmon"
+        android:textSize="@dimen/_25sdp"
+        android:fontFamily="@font/ubuntu_bold"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="@dimen/_25sdp"
+        android:textColor="@color/salmon"
+        android:fontFamily="@font/ubuntu_bold"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:gravity="center"/>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Enter Your Email"
-        app:hintTextColor="@color/colorTextSecondary"
-        android:textColorHint="@color/colorTextSecondary"
-        app:boxStrokeColor="@color/softRed"
+        android:hint="@string/email"
+        app:hintTextColor="@color/brightGray"
+        android:textColorHint="@color/brightGray"
+        android:fontFamily="@font/ubuntu_regular"
+        app:boxStrokeColor="@color/salmon"
         app:boxStrokeWidthFocused="@dimen/_2sdp"
         app:startIconDrawable="@drawable/ic_baseline_email_24"
-        app:startIconTint="@color/softRed"
+        app:startIconTint="@color/salmon"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/softRed">
+        app:endIconTint="@color/salmon">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/ubuntu_regular"
             android:inputType="textEmailAddress"
-            android:textColor="@color/colorTextSecondary"
-            android:textCursorDrawable="@null"/>
+            android:textColor="@color/brightGray"
+            android:textCursorDrawable="@null"
+            tools:ignore="TouchTargetSizeCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Password"
-        app:hintTextColor="@color/colorTextSecondary"
-        android:textColorHint="@color/colorTextSecondary"
-        app:boxStrokeColor="@color/softRed"
+        android:hint="@string/password"
+        android:fontFamily="@font/ubuntu_regular"
+        app:hintTextColor="@color/brightGray"
+        android:textColorHint="@color/brightGray"
+        app:boxStrokeColor="@color/salmon"
         app:boxStrokeWidthFocused="@dimen/_2sdp"
         app:startIconDrawable="@drawable/ic_baseline_lock_24"
-        app:startIconTint="@color/softRed"
+        app:startIconTint="@color/salmon"
         app:endIconMode="password_toggle"
-        app:endIconTint="@color/softRed">
+        app:endIconTint="@color/salmon">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/ubuntu_regular"
             android:inputType="textPassword"
-            android:textColor="@color/colorTextSecondary"
+            android:textColor="@color/brightGray"
             android:textCursorDrawable="@null"/>
 
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signIn_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:text="SignIn"
-        android:textAllCaps="false"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/signUp_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:text="SignUp"
-        android:textAllCaps="false"/>
+        android:fontFamily="@font/ubuntu_medium"
+        android:backgroundTint="@color/salmon"
+        android:text="Sign In" />
 
 </LinearLayout>

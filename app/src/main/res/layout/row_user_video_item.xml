@@ -47,7 +47,7 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_baseline_play_circle_filled_24"
                 android:layout_centerHorizontal="true"
-                app:tint="@color/lightGray" />
+                app:tint="@color/roseWhite" />
 
         </RelativeLayout>
 

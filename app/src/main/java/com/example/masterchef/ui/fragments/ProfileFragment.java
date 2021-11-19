@@ -68,7 +68,6 @@ public class ProfileFragment extends Fragment {
         userImage =view.findViewById(R.id.userImage);
         userName = view.findViewById(R.id.userName);
         userEmail = view.findViewById(R.id.userEmail);
-        userDetails = view.findViewById(R.id.userDetails);
 
 
         progressDialog = new ProgressDialog(getActivity());

@@ -26,7 +26,7 @@
                 android:layout_height="@dimen/_50sdp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_baseline_person_24"
-                app:civ_border_color="@color/softRed"
+                app:civ_border_color="@color/salmon"
                 app:civ_border_width="2dp" />
 
             <View
@@ -43,35 +43,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="Emma Richmond"
+                    android:fontFamily="@font/ubuntu_medium"
+                    tools:text="Jowel Ahmed"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/grey_40" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="in "
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/grey_40" />
 
                     <TextView
                         android:id="@+id/userCity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="Hwy, Carthage"
+                        tools:text="Abc@gmail.com"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -86,14 +72,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="How to make Pizza"
-
+                android:fontFamily="@font/ubuntu_bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_marginTop="@dimen/_10sdp"/>
             <TextView
                 android:id="@+id/video_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="This is very good videofajklfajfl adfada"
+                android:fontFamily="@font/ubuntu_regular"
+                tools:text="So famous recipe without it dinner is uncompleted"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:textSize="@dimen/_12sdp"
                 android:textColor="@color/grey_40"/>
@@ -152,7 +139,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="12 likes"
+                    tools:text="100 likes"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="@font/ubuntu_medium"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                     android:textColor="@color/grey_40" />
 
@@ -161,10 +150,12 @@
                 android:id="@+id/videoTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="end|right"
                 android:text="3h ago"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textSize="@dimen/_12sdp"
+                android:maxLines="1"
                 android:textColor="@color/grey_40" />
 
         </LinearLayout>

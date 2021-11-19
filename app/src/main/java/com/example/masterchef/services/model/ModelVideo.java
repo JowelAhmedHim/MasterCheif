@@ -3,13 +3,13 @@ package com.example.masterchef.services.model;
 public class ModelVideo {
 
     private String postId,videoTitle,videoDescription,videoCategory,videoThumbnail,videoUrl,videoLike,timeStamp,
-            uid,userName,userEmail,userImage;
+            uid,userName,userEmail,userImage,userPopularity;
 
     public ModelVideo() {
 
     }
 
-    public ModelVideo(String postId, String videoTitle, String videoDescription, String videoCategory, String videoThumbnail, String videoUrl, String videoLike, String timeStamp, String uid, String userName, String userEmail, String userImage) {
+    public ModelVideo(String postId, String videoTitle, String videoDescription, String videoCategory, String videoThumbnail, String videoUrl, String videoLike, String timeStamp, String uid, String userName, String userEmail, String userImage, String userPopularity) {
         this.postId = postId;
         this.videoTitle = videoTitle;
         this.videoDescription = videoDescription;
@@ -22,6 +22,7 @@ public class ModelVideo {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userImage = userImage;
+        this.userPopularity = userPopularity;
     }
 
     public String getPostId() {
@@ -70,5 +71,9 @@ public class ModelVideo {
 
     public String getUserImage() {
         return userImage;
+    }
+
+    public String getUserPopularity() {
+        return userPopularity;
     }
 }

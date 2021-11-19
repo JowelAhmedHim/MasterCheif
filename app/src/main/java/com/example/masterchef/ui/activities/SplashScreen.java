@@ -9,57 +9,64 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.example.masterchef.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashScreen extends AppCompatActivity {
 
-    ProgressBar progressBar;
-    int progress=0;
+    private FirebaseAuth auth;
+    private ProgressBar progressBar;
+    int progress = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-requestWindowFeature(Window.FEATURE_NO_TITLE);
-getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         setContentView(R.layout.activity_splash_screen);
 
-        progressBar=findViewById(R.id.Pbar);
-        Thread thread=new Thread(new Runnable() {
+        auth = FirebaseAuth.getInstance();
+
+        progressBar = findViewById(R.id.Pbar);
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 doWork();
                 goMethod();
             }
-
-
-
-
         });
         thread.start();
 
 
     }
+
     private void doWork() {
-for(progress=20; progress<=100;progress=progress+20){
+        for (progress = 20; progress <= 100; progress = progress + 20) {
 
-    try {
-        Thread.sleep(1000);
-        progressBar.setProgress(progress);
-    } catch (InterruptedException e) {
-        e.printStackTrace();
+            try {
+                Thread.sleep(1000);
+                progressBar.setProgress(progress);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
-    //cheak the splash screen
 
-
-}
-    }
-    //
     private void goMethod() {
-
-        Intent intent=new Intent(SplashScreen.this, SignInActivity.class);
-        startActivity(intent);
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null){
+            //user not logged in , start login activity
+            startActivity(new Intent(SplashScreen.this, AppInfo.class));
+        }else{
+            //user is logged in,check user
+           startActivity(new Intent(SplashScreen.this,MainActivity.class));
+        }
         finish();
+
     }
 }

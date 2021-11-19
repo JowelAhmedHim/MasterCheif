@@ -55,7 +55,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         init();
         signInBtn.setOnClickListener(this);
-        signUpBtn.setOnClickListener(this);
     }
 
     private void init(){
@@ -67,7 +66,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         passwordEt = findViewById(R.id.password_et);
 
         signInBtn = findViewById(R.id.signIn_btn);
-        signUpBtn = findViewById(R.id.signUp_btn);
 
     }
 
@@ -77,10 +75,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()){
             case R.id.signIn_btn:
                 inputValidation();
-                break;
-            case R.id.signUp_btn:
-                startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
-                finish();
                 break;
         }
 
@@ -94,11 +88,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         {
             return;
         }
-
-        if (!validation.passwordValidation(passwordEt,lay_password)){
-            return;
-        }
-
         else {
             loginUser();
         }

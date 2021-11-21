@@ -2,6 +2,7 @@ package com.example.masterchef.ui.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.masterchef.R;
 import com.example.masterchef.services.model.ModelVideo;
+import com.example.masterchef.ui.activities.UploadVideo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -98,6 +100,7 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
 
         //add item in menu
         popupMenu.getMenu().add(Menu.NONE,0,0,"Delete");
+        popupMenu.getMenu().add(Menu.NONE,1,1,"Edit");
 
         //item click listener
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -109,6 +112,12 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
                     //delete option clicked
                     beginDelete(videoId,videoThumbnail,videoUri);
                 }
+//                else if (id == 1){
+//                    Intent intent = new Intent(context, UploadVideo.class);
+//                    intent.putExtra("key","editPost");
+//                    intent.putExtra("editPostId",videoId);
+//                    context.startActivity(intent);
+//                }
                 return false;
             }
         });
@@ -176,7 +185,6 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
 
 
     }
-
 
     @Override
     public int getItemCount() {

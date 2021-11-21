@@ -16,6 +16,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileUtils;
@@ -30,6 +32,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,10 +52,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.file.Path;
 import java.security.Permission;
@@ -78,9 +85,11 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     private Spinner spinner ;
     private TextView imageTv,videoTv;
     private Button upload,videoBtn,thumbnailBtn;
+    private ImageView thumbnailIv;
+    private LinearLayout linearLayout;
 
 
-    private String videoTitle,videoDescription,videoCategory;
+    private String videoTitle,videoDescription,videoCategory,videoThumbnail,videoUrl;
     private String userName,userEmail,userImage,userPopularity;
 
     private Uri videoUri,thumbnailUri;
@@ -89,10 +98,9 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     private DatabaseReference databaseReference;
 
 
-
-
-
     private ProgressDialog progressDialog;
+
+    String isUpdateKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,30 +111,84 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         progressDialog.setTitle("Please wait...");
         progressDialog.setCancelable(false);
 
+
         firebaseAuth = FirebaseAuth.getInstance();
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Video Upload");
+        getSupportActionBar().setTitle("Add Post");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
+
 
         initPermission();
         init();
         spinnerFunction();
         getUserInfo();
 
+
         videoBtn.setOnClickListener(this);
         thumbnailBtn.setOnClickListener(this);
-
         upload.setOnClickListener(this);
         spinner.setOnItemSelectedListener(this);
 
+//
+//        //get data through intent from VideoAdapter
+//        Intent intent = getIntent();
+//        isUpdateKey = ""+intent.getStringExtra("key");
+//        String editPostId = ""+intent.getStringExtra("editPostId");
+//
+//        //validate if we came here for update
+//        if (isUpdateKey.equals("editPost")){
+//            //for updating data
+//            toolbar.setTitle("Update Post");
+//            upload.setText("Update");
+//            loadPostData(editPostId);
+//
+//        }else {
+//            //for adding data
+//            toolbar.setTitle("Add Post");
+//            upload.setText("Upload");
+//        }
+
+    }
+
+    private void loadPostData(String editPostId) {
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("VideoPosts");
+        //get details of post using id
+        Query query = reference.orderByChild("postId").equalTo(editPostId);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds: snapshot.getChildren()){
+
+                    //get data
+                    videoTitle = ""+ds.child("videoTitle").getValue();
+                    videoDescription = ""+ds.child("videoDescription").getValue();
+                    videoCategory = ""+ds.child("videoCategory").getValue();
+                    videoThumbnail = ""+ds.child("videoThumbnail").getValue();
+                    videoUrl = ""+ds.child("videoUrl").getValue();
+
+                    //set data
+                    videoNameEt.setText(videoTitle);
+                    videoDescriptionEt.setText(videoDescription);
+                    try {
+                        Picasso.get().load(videoThumbnail).into(thumbnailIv);
+                    }catch (Exception e){
+
+                    }
+                    linearLayout.setVisibility(View.GONE);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void getUserInfo() {
@@ -157,9 +219,11 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         spinner = findViewById(R.id.spinner);
         videoTv = findViewById(R.id.video_tv);
         imageTv = findViewById(R.id.image_tv);
+//        thumbnailIv = findViewById(R.id.thumbnail_IV);
         upload = findViewById(R.id.upload);
         videoBtn = findViewById(R.id.vide_btn);
         thumbnailBtn = findViewById(R.id.image_btn);
+        linearLayout = findViewById(R.id.linearlayout2);
     }
 
     //permission
@@ -167,6 +231,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
     }
+
 
     //spinner function generate
     private void spinnerFunction() {
@@ -181,7 +246,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         adapter.setDropDownViewResource(android.R.layout.simple_expandable_list_item_1);
         spinner.setAdapter(adapter);
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -232,7 +296,12 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         else if (videoUri ==  null){
             Toast.makeText(this, "Select a video to upload", Toast.LENGTH_SHORT).show();
 
-        }else {
+        }
+//        else if (isUpdateKey.equals("editPost")){
+//
+//
+//        }
+        else {
             uploadVideo();
         }
 
@@ -240,7 +309,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
     //upload video on database
     private void uploadVideo() {
-        progressDialog.setMessage("Video uploading...");
+        progressDialog.setMessage("Uploading post...");
         progressDialog.show();
 
         String timestamp = ""+System.currentTimeMillis();
@@ -254,37 +323,42 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         Long time = System.currentTimeMillis();
         final String timeStamp = ""+time;
 
-
+//        if (thumbnailIv.getDrawable() != null){
+//            //get image from bitmap
+//            Bitmap bitmap = ((BitmapDrawable)thumbnailIv.getDrawable()).getBitmap();
+//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//            //image compress
+//            bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+//            byte[] data = byteArrayOutputStream.toByteArray();
+//        }
 
 
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(videoFilename);
-        storageReference.putFile(videoUri)
+        storageReference.putFile(thumbnailUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        //video uploaded,get url of video
+                        //thumbnail uploaded,get url of thumbnail
                         Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                         while (!uriTask.isSuccessful());
-                        Uri downloadVideoUri = uriTask.getResult();
+                        Uri downloadImageUri = uriTask.getResult();
                         if (uriTask.isSuccessful()){
-                            //url of upload video is received
-                            //save video details to database
-
-
+                            //url of upload thumbnail is received
                             //upload image
                             StorageReference storageReference = FirebaseStorage.getInstance().getReference(thumbnailFilename);
-                            storageReference.putFile(thumbnailUri)
+                            storageReference.putFile(videoUri)
                                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            //get url from upload image
+                                            //video uploaded,get url of video
                                             Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                                             while (!uriTask.isSuccessful());
-                                            Uri downloadImageUri = uriTask.getResult();
+                                            Uri downloadVideoUri = uriTask.getResult();
                                             if (uriTask.isSuccessful()){
-
+                                                //url of upload video is received
+                                                //save video details in database
                                                 databaseReference = FirebaseDatabase.getInstance().getReference("VideoPosts");
                                                 String getKey = databaseReference.push().getKey();
 
@@ -302,9 +376,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                                 hashMap.put("userEmail",""+userEmail);
                                                 hashMap.put("userImage",""+userImage);
 //                                                hashMap.put("userPopularity",""+userPopularity);
-
-
-
 
                                                 databaseReference.child(getKey).setValue(hashMap)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -326,6 +397,13 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
                                         }
                                     })
+                                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                                            double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                                            progressDialog.setMessage("uploaded" +((int)progress)+ "%...");
+                                        }
+                                    })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
@@ -334,12 +412,11 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                         }
                                     });
 
-
-
-
                         }
                     }
+
                 })
+
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -540,6 +617,12 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
             cursor.moveToNext();
             imageName = cursor.getString(name);
             imageTv.setText(imageName);
+//            try {
+//                Picasso.get().load(thumbnailUri).into(thumbnailIv);
+//            }catch (Exception e){
+//
+//            }
+
         }catch (Exception e){
             Toast.makeText(this, "Something wrong", Toast.LENGTH_SHORT).show();
         }finally {

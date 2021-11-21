@@ -1,6 +1,7 @@
 package com.example.masterchef.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.example.masterchef.R;
 
 import com.example.masterchef.services.listener.PostListener;
 import com.example.masterchef.services.model.ModelVideo;
+import com.example.masterchef.ui.activities.MoviePlayerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,13 +53,17 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         this.context = context;
         this.postList = postList;
 
-
         myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
         postRef = FirebaseDatabase.getInstance().getReference().child("VideoPosts");
         userRef = FirebaseDatabase.getInstance().getReference("Users");
 
     }
+
+    public AdapterPost(PostListener postListener){
+        this.postListener = postListener;
+    }
+
 
 
 
@@ -74,7 +80,10 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
 
+
         ModelVideo modelPosts = postList.get(i);
+        myViewHolder.postClicked(modelPosts);
+
 
         //get data
 
@@ -156,6 +165,15 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             }
         });
 
+        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MoviePlayerActivity.class);
+                intent.putExtra("videoUrl",""+videoUri);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     private void setLikes(MyViewHolder myViewHolder, String videoId) {
@@ -199,6 +217,15 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             userImage = itemView.findViewById(R.id.userImage);
             videoLikeBtn = itemView.findViewById(R.id.video_like_btn);
 
+        }
+
+        public void postClicked(ModelVideo modelVideo){
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    postListener.onPostClicked(modelVideo);
+                }
+            });
         }
 
 

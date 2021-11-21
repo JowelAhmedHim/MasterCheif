@@ -88,6 +88,7 @@ public class RecipesFragment extends Fragment implements PostListener {
                     //adapter
                     adapterPost = new AdapterPost(getActivity(),postList);
 
+
                     //setAdapter to recyclerview
                     recyclerView.setAdapter(adapterPost);
 

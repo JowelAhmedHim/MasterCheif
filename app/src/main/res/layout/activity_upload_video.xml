@@ -86,11 +86,20 @@
             <LinearLayout
                 android:id="@+id/linearlayout1"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:layout_below="@+id/linearlayout3"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 android:weightSum="10">
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/thumbnail_IV"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="6"-->
+<!--                    android:src="@drawable/ic_launcher_background"-->
+<!--                    android:scaleType="fitXY"/>-->
+
 
                 <TextView
                     android:id="@+id/image_tv"
@@ -121,7 +130,7 @@
             <LinearLayout
                 android:id="@+id/linearlayout2"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:layout_below="@+id/linearlayout1"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal"

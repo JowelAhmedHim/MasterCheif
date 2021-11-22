@@ -20,12 +20,14 @@
             app:layout_constraintTop_toBottomOf="@id/userImage"/>
 
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/background_tv_show"
             android:paddingBottom="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/userName" />
+            app:layout_constraintTop_toTopOf="@+id/userName"
+            tools:layout_editor_absoluteX="5dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userImage"
@@ -45,26 +47,43 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:includeFontPadding="false"
             android:paddingTop="@dimen/_8sdp"
             tools:text="Jowel Ahmed"
+            android:textSize="@dimen/_16sdp"
             android:textColor="@color/colorTextPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:fontFamily="@font/ubuntu_bold"
+            android:includeFontPadding="false"
+            app:layout_constraintEnd_toStartOf="@+id/editProfile"
             app:layout_constraintStart_toEndOf="@+id/userImage"
-            app:layout_constraintTop_toTopOf="@id/userImage" />
+            app:layout_constraintTop_toTopOf="@id/userImage"/>
 
         <TextView
             android:id="@+id/userEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_regular"
-            tools:text="Abc@gmail.cm"
+            android:paddingTop="@dimen/_5sdp"
+            tools:text="Abc@gmail.com"
             android:textColor="@color/colorTextOther"
             android:textSize="@dimen/_12sdp"
+            android:fontFamily="@font/ubuntu_regular"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintEnd_toEndOf="@+id/userName"
             app:layout_constraintStart_toStartOf="@+id/userName"
             app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+        <ImageView
+            android:id="@+id/editProfile"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_baseline_edit_24"
+            app:layout_constraintBottom_toBottomOf="@+id/userEmail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/userName"
+            android:layout_margin="@dimen/_10sdp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -78,6 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        //setUp progress dialog
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please wait...");
         progressDialog.setCancelable(false);
@@ -152,8 +153,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }).show();
     }
-
-
 
     private void requestStoragePermission() {
         ActivityCompat.requestPermissions(this,storagePermission,STORAGE_REQUEST_CODE);
@@ -346,7 +345,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             Uri downloadUri = uriTask.getResult();
 
                             if (uriTask.isSuccessful()){
-                                //save info without image
+                                //save info with image
                                 HashMap<String,Object> hashMap = new HashMap<>();
                                 hashMap.put("uid",""+firebaseAuth.getUid());
                                 hashMap.put("email",""+email);
@@ -358,7 +357,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 hashMap.put("profileImage",""+downloadUri);
 
                                 //save data into database
-
                                 DatabaseReference  reference = FirebaseDatabase.getInstance().getReference("Users");
                                 reference.child(firebaseAuth.getUid()).setValue(hashMap)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {

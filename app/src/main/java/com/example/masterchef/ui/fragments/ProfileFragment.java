@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.masterchef.R;
+import com.example.masterchef.ui.activities.EditProfile;
 import com.example.masterchef.ui.activities.SignInActivity;
 import com.example.masterchef.ui.adapter.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
@@ -36,7 +37,7 @@ public class ProfileFragment extends Fragment {
     private ViewPagerAdapter viewPagerAdapter;
     private TabLayout tableLayout;
 
-    private ImageView userImage;
+    private ImageView userImage,editProfile;
     private TextView userName,userEmail,userDetails;
 
 
@@ -65,13 +66,21 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        progressDialog = new ProgressDialog(getActivity());
+        firebaseAuth = FirebaseAuth.getInstance();
+
+
         userImage =view.findViewById(R.id.userImage);
         userName = view.findViewById(R.id.userName);
         userEmail = view.findViewById(R.id.userEmail);
+        editProfile = view.findViewById(R.id.editProfile);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), EditProfile.class));
+            }
+        });
 
-
-        progressDialog = new ProgressDialog(getActivity());
-        firebaseAuth = FirebaseAuth.getInstance();
 
         viewPager2 = view.findViewById(R.id.viewpager);
         viewPagerAdapter = new ViewPagerAdapter(getActivity());
@@ -90,6 +99,8 @@ public class ProfileFragment extends Fragment {
         checkUser();
     }
 
+
+    //check user signIn details
     private void checkUser() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user==null){
@@ -99,6 +110,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    //get user info from firebase
     private void loadUserInfo() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.orderByChild("uid").equalTo(firebaseAuth.getUid())
@@ -115,11 +127,12 @@ public class ProfileFragment extends Fragment {
                             //set user data to view
                             userName.setText(name);
                             userEmail.setText(email);
+
                             try {
                                 Picasso.get().load(profileImage).into(userImage);
 
                             }catch (Exception e){
-                                userImage.setImageResource(R.drawable.ic_baseline_person_24);
+                                userImage.setImageResource(R.drawable.ic_baseline_person_outline_24);
                             }
                         }
                     }

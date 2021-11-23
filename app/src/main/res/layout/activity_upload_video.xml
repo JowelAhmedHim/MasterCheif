@@ -96,7 +96,7 @@
 <!--                    android:id="@+id/thumbnail_IV"-->
 <!--                    android:layout_width="0dp"-->
 <!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_weight="6"-->
+<!--                    android:layout_weight="2"-->
 <!--                    android:src="@drawable/ic_launcher_background"-->
 <!--                    android:scaleType="fitXY"/>-->
 
@@ -124,7 +124,8 @@
                     android:backgroundTint="@color/salmon"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:text="Select Image" />
+                    android:text="Image"
+                    android:fontFamily="@font/ubuntu_medium"/>
             </LinearLayout>
 
             <LinearLayout
@@ -155,7 +156,8 @@
                     android:backgroundTint="@color/salmon"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:text="Select Video" />
+                    android:text="Video"
+                    android:fontFamily="@font/ubuntu_medium"/>
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton

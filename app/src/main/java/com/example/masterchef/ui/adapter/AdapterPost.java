@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,8 +44,10 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     private DatabaseReference likeRef;
     private DatabaseReference userRef;
     private DatabaseReference postRef;
+    private DatabaseReference favRef;
 
     boolean mVideoLike = false;
+    boolean mVideoFab = false;
 
 
 
@@ -57,14 +60,9 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
         postRef = FirebaseDatabase.getInstance().getReference().child("VideoPosts");
         userRef = FirebaseDatabase.getInstance().getReference("Users");
+        favRef = FirebaseDatabase.getInstance().getReference().child("Favourite");
 
     }
-
-    public AdapterPost(PostListener postListener){
-        this.postListener = postListener;
-    }
-
-
 
 
     @NonNull
@@ -80,14 +78,10 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
 
-
         ModelVideo modelPosts = postList.get(i);
         myViewHolder.postClicked(modelPosts);
 
-
         //get data
-
-
         String videoId = modelPosts.getPostId();
         String videoTitle = modelPosts.getVideoTitle();
         String videoDescription = modelPosts.getVideoDescription();
@@ -116,6 +110,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         myViewHolder.userCity.setText(userEmail);
 
         setLikes(myViewHolder,videoId);
+        setFav(myViewHolder,videoId);
 
         try {
             Picasso.get().load(videoThumbnailUri).into(myViewHolder.videoThumbnail);
@@ -165,6 +160,34 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             }
         });
 
+        myViewHolder.favouritePostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show();
+                mVideoFab = true;
+                favRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (mVideoFab){
+                            if (snapshot.child(myUid).hasChild(videoId)){
+                                //already in favourite list ,remove it
+                                favRef.child(myUid).child(videoId).removeValue();
+                            }else {
+                                // add in favourite list
+                                favRef.child(myUid).child(videoId).setValue("Favourite");
+                            }
+                            mVideoFab = false;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +217,25 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         });
     }
 
+    private void setFav(MyViewHolder myViewHolder,String videoId){
+
+        favRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child(myUid).hasChild(videoId)){
+                    myViewHolder.favouritePostBtn.setColorFilter(Color.RED);
+                }else {
+                    myViewHolder.favouritePostBtn.setColorFilter(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     @Override
     public int getItemCount() {
         return postList.size();
@@ -202,7 +244,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         private TextView videTitle,videoDescription,videoLikeTxt,videoTime,userName,userCity;
-        private ImageView videoThumbnail,userImage,videoLikeBtn;
+        private ImageView videoThumbnail,userImage,videoLikeBtn, favouritePostBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -216,6 +258,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             videoThumbnail = itemView.findViewById(R.id.video_thumbnail);
             userImage = itemView.findViewById(R.id.userImage);
             videoLikeBtn = itemView.findViewById(R.id.video_like_btn);
+            favouritePostBtn = itemView.findViewById(R.id.favouritePost);
 
         }
 

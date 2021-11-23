@@ -305,7 +305,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Toast.makeText(getApplicationContext(), ""+error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

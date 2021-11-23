@@ -42,21 +42,22 @@
                     android:id="@+id/userName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
                     tools:text="Jowel Ahmed"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/grey_40" />
+                    android:textSize="@dimen/_16sdp"/>
 
 
-                    <TextView
+                <TextView
                         android:id="@+id/userCity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         tools:text="Abc@gmail.com"
+                    android:textSize="@dimen/_10sdp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/black"
+                        android:textColor="@color/colorTextSecondary"
                         android:textStyle="bold" />
 
             </LinearLayout>
@@ -72,8 +73,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="How to make Pizza"
+                android:textColor="@color/brightGray"
                 android:fontFamily="@font/ubuntu_bold"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+             android:textSize="@dimen/_14sdp"
                 android:layout_marginTop="@dimen/_10sdp"/>
             <TextView
                 android:id="@+id/video_description"
@@ -139,13 +141,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    tools:text="100 likes"
+                    tools:text="100"
                     android:textSize="@dimen/_12sdp"
                     android:fontFamily="@font/ubuntu_medium"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                     android:textColor="@color/grey_40" />
 
             </LinearLayout>
+            <ImageView
+                android:id="@+id/favouritePost"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_baseline_favorite_24"
+                app:tint="@color/black" />
             <TextView
                 android:id="@+id/videoTime"
                 android:layout_width="0dp"

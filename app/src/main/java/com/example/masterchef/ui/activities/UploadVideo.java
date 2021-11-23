@@ -76,10 +76,14 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     public static final int IMAGE_PICK_GALLERY_CODE = 400;
     public static final int IMAGE_PICK_CAMERA_CODE = 500;
 
+    //video request constant
     public static final int VIDEO_REQUEST_CODE = 100;
 
+    //permission array
     private String[] cameraPermission;
     private String[] storagePermission;
+
+    //view
     private Toolbar toolbar;
     private EditText videoNameEt,videoDescriptionEt;
     private Spinner spinner ;
@@ -88,52 +92,55 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     private ImageView thumbnailIv;
     private LinearLayout linearLayout;
 
-
+    //string variable
     private String videoTitle,videoDescription,videoCategory,videoThumbnail,videoUrl;
     private String userName,userEmail,userImage,userPopularity;
+    private String isUpdateKey;
 
+    //uri
     private Uri videoUri,thumbnailUri;
 
+    //firebase
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
 
-
+    //progress dialog
     private ProgressDialog progressDialog;
 
-    String isUpdateKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_video);
 
+        //progress dialog instance
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please wait...");
         progressDialog.setCancelable(false);
 
-
+        //firebase initialization
         firebaseAuth = FirebaseAuth.getInstance();
 
-
+        //toolbar setup
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Add Post");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(view -> finish());
 
-
+        //initialization view,permission,spinner
         initPermission();
         init();
         spinnerFunction();
         getUserInfo();
 
-
+        //even handler
         videoBtn.setOnClickListener(this);
         thumbnailBtn.setOnClickListener(this);
         upload.setOnClickListener(this);
         spinner.setOnItemSelectedListener(this);
 
-//
+
 //        //get data through intent from VideoAdapter
 //        Intent intent = getIntent();
 //        isUpdateKey = ""+intent.getStringExtra("key");
@@ -153,10 +160,31 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 //        }
 
     }
+    //permission
+    private void initPermission() {
+        cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    }
 
+    //initialise view
+    public void init(){
+        videoNameEt = findViewById(R.id.video_title);
+        videoDescriptionEt = findViewById(R.id.video_description);
+        spinner = findViewById(R.id.spinner);
+        videoTv = findViewById(R.id.video_tv);
+        imageTv = findViewById(R.id.image_tv);
+//        thumbnailIv = findViewById(R.id.thumbnail_IV);
+        upload = findViewById(R.id.upload);
+        videoBtn = findViewById(R.id.vide_btn);
+        thumbnailBtn = findViewById(R.id.image_btn);
+        linearLayout = findViewById(R.id.linearlayout2);
+    }
+
+    //load postData from postId for video update
     private void loadPostData(String editPostId) {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("VideoPosts");
+
         //get details of post using id
         Query query = reference.orderByChild("postId").equalTo(editPostId);
         query.addValueEventListener(new ValueEventListener() {
@@ -177,20 +205,20 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                     try {
                         Picasso.get().load(videoThumbnail).into(thumbnailIv);
                     }catch (Exception e){
-
+                        thumbnailIv.setImageResource(R.drawable.ic_baseline_person_24);
                     }
                     linearLayout.setVisibility(View.GONE);
-
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(getApplicationContext(), ""+ error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    //get user data to save with post
     private void getUserInfo() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         Query query = reference.orderByChild("uid").equalTo(firebaseAuth.getUid());
@@ -211,27 +239,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
             }
         });
     }
-
-    //initialise view
-    public void init(){
-        videoNameEt = findViewById(R.id.video_title);
-        videoDescriptionEt = findViewById(R.id.video_description);
-        spinner = findViewById(R.id.spinner);
-        videoTv = findViewById(R.id.video_tv);
-        imageTv = findViewById(R.id.image_tv);
-//        thumbnailIv = findViewById(R.id.thumbnail_IV);
-        upload = findViewById(R.id.upload);
-        videoBtn = findViewById(R.id.vide_btn);
-        thumbnailBtn = findViewById(R.id.image_btn);
-        linearLayout = findViewById(R.id.linearlayout2);
-    }
-
-    //permission
-    private void initPermission() {
-        cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    }
-
 
     //spinner function generate
     private void spinnerFunction() {
@@ -270,7 +277,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
             case R.id.upload:
                 dataValidation();
                 break;
-
         }
 
     }
@@ -297,10 +303,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
             Toast.makeText(this, "Select a video to upload", Toast.LENGTH_SHORT).show();
 
         }
-//        else if (isUpdateKey.equals("editPost")){
-//
-//
-//        }
         else {
             uploadVideo();
         }
@@ -309,7 +311,8 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
     //upload video on database
     private void uploadVideo() {
-        progressDialog.setMessage("Uploading post...");
+
+        progressDialog.setMessage("Uploading Post...");
         progressDialog.show();
 
         String timestamp = ""+System.currentTimeMillis();
@@ -317,12 +320,20 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         //video file path and file name in database
         String videoFilename = "Videos/" + "video_"+ timestamp;
 
+        //image deleted, upload new image
         //save info with image
         String  thumbnailFilename = "Thumbnails/"+""+firebaseAuth.getUid();
 
-        Long time = System.currentTimeMillis();
-        final String timeStamp = ""+time;
-
+//        if (!videoThumbnail.equals("")){
+//            //with image
+//            updateWasWithImage();
+//        }else if (thumbnailIv.getDrawable()!=null){
+//            //with image
+//            updateWithNowImage();
+//        }else {
+//            Toast.makeText(getApplicationContext(), "Please select an Thumbnail for Video ", Toast.LENGTH_SHORT).show();
+//        }
+//
 //        if (thumbnailIv.getDrawable() != null){
 //            //get image from bitmap
 //            Bitmap bitmap = ((BitmapDrawable)thumbnailIv.getDrawable()).getBitmap();
@@ -331,8 +342,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 //            bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
 //            byte[] data = byteArrayOutputStream.toByteArray();
 //        }
-
-
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(videoFilename);
         storageReference.putFile(thumbnailUri)
@@ -370,7 +379,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                                 hashMap.put("videoThumbnail",""+downloadImageUri);
                                                 hashMap.put("videoUrl",""+downloadVideoUri);
                                                 hashMap.put("videoLike","0");
-                                                hashMap.put("timeStamp",""+timeStamp);
+                                                hashMap.put("timeStamp",""+timestamp);
                                                 hashMap.put("uid",""+firebaseAuth.getUid());
                                                 hashMap.put("userName",""+userName);
                                                 hashMap.put("userEmail",""+userEmail);
@@ -426,6 +435,36 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                 });
 
 
+    }
+
+    private void updateWasWithImage() {
+        //delete previous image;
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(videoThumbnail);
+        storageReference.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                        //image deleted, upload new image
+                        //save info with image
+                        String  thumbnailFilename = "Thumbnails/"+""+firebaseAuth.getUid();
+
+                        // get image from bitmap
+                        Bitmap bitmap = ((BitmapDrawable)thumbnailIv.getDrawable()).getBitmap();
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        //image compress
+                        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+                        byte[] data = byteArrayOutputStream.toByteArray();
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
     }
 
     //clear ui data

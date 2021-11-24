@@ -19,6 +19,7 @@ import com.example.masterchef.R;
 import com.example.masterchef.services.listener.PostListener;
 import com.example.masterchef.services.model.ModelVideo;
 import com.example.masterchef.ui.activities.MoviePlayerActivity;
+import com.example.masterchef.ui.activities.ProfileActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,9 +51,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     boolean mVideoFab = false;
 
 
-
-
-    public AdapterPost(Context context, ArrayList<ModelVideo> postList ) {
+    public AdapterPost(Context context, ArrayList<ModelVideo> postList) {
         this.context = context;
         this.postList = postList;
 
@@ -68,11 +67,11 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-       if (layoutInflater == null){
-           layoutInflater = LayoutInflater.from(context);
-       }
-       View view = layoutInflater.inflate(R.layout.row_timeline_item,viewGroup,false);
-       return new MyViewHolder(view);
+        if (layoutInflater == null) {
+            layoutInflater = LayoutInflater.from(context);
+        }
+        View view = layoutInflater.inflate(R.layout.row_timeline_item, viewGroup, false);
+        return new MyViewHolder(view);
     }
 
     @Override
@@ -99,7 +98,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         //convert timestamp to dd/mm/yyyy hh:mm ap/pm
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(videTimeStamp));
-        String time = DateFormat.format("dd/MM/yyy hh:mm aa",calendar).toString();
+        String time = DateFormat.format("dd/MM/yyy hh:mm aa", calendar).toString();
 
         //set data
         myViewHolder.videTitle.setText(videoTitle);
@@ -109,18 +108,19 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         myViewHolder.userName.setText(userName);
         myViewHolder.userCity.setText(userEmail);
 
-        setLikes(myViewHolder,videoId);
-        setFav(myViewHolder,videoId);
-
         try {
             Picasso.get().load(videoThumbnailUri).into(myViewHolder.videoThumbnail);
             Picasso.get().load(userImageUri).into(myViewHolder.userImage);
-        }catch (Exception e){
+        } catch (Exception e) {
             myViewHolder.videoThumbnail.setImageResource(R.drawable.food);
             myViewHolder.userImage.setImageResource(R.drawable.ic_baseline_person_24);
         }
 
+        //function for like & favourite button view colour
+        setLikes(myViewHolder, videoId);
+        setFav(myViewHolder, videoId);
 
+        //add like for this video in firebase
         myViewHolder.videoLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,16 +133,16 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
                 likeRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (mVideoLike){
-                            if (dataSnapshot.child(videoPostId).hasChild(myUid)){
+                        if (mVideoLike) {
+                            if (dataSnapshot.child(videoPostId).hasChild(myUid)) {
                                 //already liked, so remove like
-                                postRef.child(videoPostId).child("videoLike").setValue(""+(videoPostLike-1));
+                                postRef.child(videoPostId).child("videoLike").setValue("" + (videoPostLike - 1));
 //                                postRef.child(videoPostId).child("userPopularity").setValue(""+(p-1));
                                 likeRef.child(videoPostId).child(myUid).removeValue();
 //                                userRef.child(modelPosts.getUid()).child("popularity").setValue(""+(p-1));
 
-                            }else {
-                                postRef.child(videoPostId).child("videoLike").setValue(""+(videoPostLike+1));
+                            } else {
+                                postRef.child(videoPostId).child("videoLike").setValue("" + (videoPostLike + 1));
 //                                postRef.child(videoPostId).child("userPopularity").setValue(""+(p+1));
 //                                userRef.child(modelPosts.getUid()).child("popularity").setValue(""+(p+1));
                                 likeRef.child(videoPostId).child(myUid).setValue("Liked");
@@ -160,6 +160,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             }
         });
 
+        //add this post as favourite video in firebase
         myViewHolder.favouritePostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,11 +169,11 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
                 favRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (mVideoFab){
-                            if (snapshot.child(myUid).hasChild(videoId)){
+                        if (mVideoFab) {
+                            if (snapshot.child(myUid).hasChild(videoId)) {
                                 //already in favourite list ,remove it
                                 favRef.child(myUid).child(videoId).removeValue();
-                            }else {
+                            } else {
                                 // add in favourite list
                                 favRef.child(myUid).child(videoId).setValue("Favourite");
                             }
@@ -182,49 +183,73 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Toast.makeText(context, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
 
+        myViewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUserDetail(userId);
+            }
+        });
+
+        myViewHolder.userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUserDetail(userId);
+            }
+        });
+
+        //item clicked listener,send to exoplayer to show video
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MoviePlayerActivity.class);
-                intent.putExtra("videoUrl",""+videoUri);
+                intent.putExtra("videoUrl", "" + videoUri);
                 context.startActivity(intent);
             }
         });
 
+
     }
 
+    private void showUserDetail(String userId) {
+        Intent intent = new Intent(context, ProfileActivity.class);
+        intent.putExtra("userId",""+userId);
+        context.startActivity(intent);
+    }
+
+    //change like btn colour by checking video like
     private void setLikes(MyViewHolder myViewHolder, String videoId) {
         likeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               if (dataSnapshot.child(videoId).hasChild(myUid)){
-                   myViewHolder.videoLikeBtn.setColorFilter(Color.GREEN);
-               }else {
-                   myViewHolder.videoLikeBtn.setColorFilter(Color.BLACK);
-               }
+                if (dataSnapshot.child(videoId).hasChild(myUid)) {
+                    myViewHolder.videoLikeBtn.setColorFilter(Color.GREEN);
+                } else {
+                    myViewHolder.videoLikeBtn.setColorFilter(Color.BLACK);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(context, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void setFav(MyViewHolder myViewHolder,String videoId){
+    //change favourite btn colour by checking favourite video
+    private void setFav(MyViewHolder myViewHolder, String videoId) {
 
         favRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child(myUid).hasChild(videoId)){
+                if (snapshot.child(myUid).hasChild(videoId)) {
                     myViewHolder.favouritePostBtn.setColorFilter(Color.RED);
-                }else {
+                } else {
                     myViewHolder.favouritePostBtn.setColorFilter(Color.BLACK);
                 }
             }
@@ -241,10 +266,10 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         return postList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView videTitle,videoDescription,videoLikeTxt,videoTime,userName,userCity;
-        private ImageView videoThumbnail,userImage,videoLikeBtn, favouritePostBtn;
+        private TextView videTitle, videoDescription, videoLikeTxt, videoTime, userName, userCity;
+        private ImageView videoThumbnail, userImage, videoLikeBtn, favouritePostBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -262,7 +287,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
 
         }
 
-        public void postClicked(ModelVideo modelVideo){
+        public void postClicked(ModelVideo modelVideo) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

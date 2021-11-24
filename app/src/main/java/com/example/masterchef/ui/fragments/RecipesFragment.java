@@ -80,6 +80,7 @@ public class RecipesFragment extends Fragment implements PostListener {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 postList.clear();
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
+
                     ModelVideo modelPost = ds.getValue(ModelVideo.class);
 
                     //getting data from firebase add data in array list
@@ -87,7 +88,6 @@ public class RecipesFragment extends Fragment implements PostListener {
 
                     //adapter
                     adapterPost = new AdapterPost(getActivity(),postList);
-
 
                     //setAdapter to recyclerview
                     recyclerView.setAdapter(adapterPost);
@@ -98,7 +98,7 @@ public class RecipesFragment extends Fragment implements PostListener {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
     }

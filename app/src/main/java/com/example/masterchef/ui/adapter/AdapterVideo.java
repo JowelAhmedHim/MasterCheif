@@ -153,7 +153,6 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
                                            //delete value from database where videoId match
                                            ds.getRef().removeValue();
                                        }
-
                                        progressDialog.dismiss();
                                        Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show();
                                    }

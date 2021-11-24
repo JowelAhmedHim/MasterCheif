@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MasterChef">
         <activity
+            android:name=".ui.activities.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.EditProfile"
             android:exported="false" />
         <activity

@@ -382,7 +382,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                          @Override
                          public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                             Toast.makeText(getApplicationContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                          }
                     });
 

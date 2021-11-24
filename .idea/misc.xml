@@ -43,17 +43,20 @@
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_edit_profile.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_main.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_movie_player.xml" value="0.22" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_profile.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_sign_in.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_sign_up.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_splash_screen.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_upload_video.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/custom_pop_up_window.xml" value="0.16203703703703703" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/exo_control_view.xml" value="0.1" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/fragment_favourite.xml" value="0.3067708333333333" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/fragment_leaderboard.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/fragment_profile.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/fragment_profile_video.xml" value="0.2953125" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/fragment_recipes.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_leaderboard_item.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_profile_video.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_timeline_item.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_user_video_item.xml" value="0.38697916666666665" />
       </map>

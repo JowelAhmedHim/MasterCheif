@@ -1,7 +1,6 @@
 package com.example.masterchef.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -15,11 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.masterchef.R;
-
-import com.example.masterchef.services.listener.PostListener;
 import com.example.masterchef.services.model.ModelVideo;
-import com.example.masterchef.ui.activities.MoviePlayerActivity;
-import com.example.masterchef.ui.activities.ProfileActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,9 +25,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
-public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> {
+public class AdapterUserProfile extends RecyclerView.Adapter<AdapterUserProfile.UserProfileViewHolder> {
 
     private Context context;
     private ArrayList<ModelVideo> postList;
@@ -50,7 +46,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     boolean mVideoFab = false;
 
 
-    public AdapterPost(Context context, ArrayList<ModelVideo> postList) {
+    public AdapterUserProfile(Context context, ArrayList<ModelVideo> postList) {
         this.context = context;
         this.postList = postList;
 
@@ -59,24 +55,22 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         postRef = FirebaseDatabase.getInstance().getReference().child("VideoPosts");
         userRef = FirebaseDatabase.getInstance().getReference("Users");
         favRef = FirebaseDatabase.getInstance().getReference().child("Favourite");
-
     }
-
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public UserProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(context);
         }
-        View view = layoutInflater.inflate(R.layout.row_timeline_item, viewGroup, false);
-        return new MyViewHolder(view);
+        View view = layoutInflater.inflate(R.layout.row_profile_video, parent, false);
+        return new UserProfileViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull UserProfileViewHolder holder, int position) {
 
-        ModelVideo modelPosts = postList.get(i);
+        ModelVideo modelPosts = postList.get(position);
 
         //get data
         String videoId = modelPosts.getPostId();
@@ -99,27 +93,26 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         String time = DateFormat.format("dd/MM/yyy hh:mm aa", calendar).toString();
 
         //set data
-        myViewHolder.videTitle.setText(videoTitle);
-        myViewHolder.videoDescription.setText(videoDescription);
-        myViewHolder.videoLikeTxt.setText(videLike);
-        myViewHolder.videoTime.setText(time);
-        myViewHolder.userName.setText(userName);
-        myViewHolder.userCity.setText(userEmail);
+        holder.videTitle.setText(videoTitle);
+        holder.videoDescription.setText(videoDescription);
+        holder.videoLikeTxt.setText(videLike);
+        holder.videoTime.setText(time);
 
         try {
-            Picasso.get().load(videoThumbnailUri).into(myViewHolder.videoThumbnail);
-            Picasso.get().load(userImageUri).into(myViewHolder.userImage);
+            Picasso.get().load(videoThumbnailUri).into(holder.videoThumbnail);
+
         } catch (Exception e) {
-            myViewHolder.videoThumbnail.setImageResource(R.drawable.food);
-            myViewHolder.userImage.setImageResource(R.drawable.ic_baseline_person_24);
+            holder.videoThumbnail.setImageResource(R.drawable.food);
+
         }
 
+
         //function for like & favourite button view colour
-        setLikes(myViewHolder, videoId);
-        setFav(myViewHolder, videoId);
+        setLikes(holder, videoId);
+        setFav(holder, videoId);
 
         //add like for this video in firebase
-        myViewHolder.videoLikeBtn.setOnClickListener(new View.OnClickListener() {
+        holder.videoLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final int videoPostLike = Integer.parseInt(videLike);
@@ -158,8 +151,9 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             }
         });
 
+
         //add this post as favourite video in firebase
-        myViewHolder.favouritePostBtn.setOnClickListener(new View.OnClickListener() {
+        holder.favouritePostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show();
@@ -187,41 +181,10 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             }
         });
 
-        myViewHolder.userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showUserDetail(userId);
-            }
-        });
-
-        myViewHolder.userName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showUserDetail(userId);
-            }
-        });
-
-        //item clicked listener,send to exoplayer to show video
-        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, MoviePlayerActivity.class);
-                intent.putExtra("videoUrl", "" + videoUri);
-                context.startActivity(intent);
-            }
-        });
-
-
-    }
-
-    private void showUserDetail(String userId) {
-        Intent intent = new Intent(context, ProfileActivity.class);
-        intent.putExtra("userId",""+userId);
-        context.startActivity(intent);
     }
 
     //change like btn colour by checking video like
-    private void setLikes(MyViewHolder myViewHolder, String videoId) {
+    private void setLikes(AdapterUserProfile.UserProfileViewHolder myViewHolder, String videoId) {
         likeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -240,7 +203,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     }
 
     //change favourite btn colour by checking favourite video
-    private void setFav(MyViewHolder myViewHolder, String videoId) {
+    private void setFav(AdapterUserProfile.UserProfileViewHolder myViewHolder, String videoId) {
 
         favRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -259,34 +222,27 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         });
     }
 
+
     @Override
     public int getItemCount() {
         return postList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class UserProfileViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView videTitle, videoDescription, videoLikeTxt, videoTime, userName, userCity;
-        private ImageView videoThumbnail, userImage, videoLikeBtn, favouritePostBtn;
+        private TextView videTitle, videoDescription, videoLikeTxt, videoTime;
+        private ImageView videoThumbnail, videoLikeBtn, favouritePostBtn;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public UserProfileViewHolder(@NonNull View itemView) {
             super(itemView);
 
             videTitle = itemView.findViewById(R.id.video_title);
             videoDescription = itemView.findViewById(R.id.video_description);
             videoLikeTxt = itemView.findViewById(R.id.video_like_txt);
-            userName = itemView.findViewById(R.id.userName);
-            userCity = itemView.findViewById(R.id.userCity);
             videoTime = itemView.findViewById(R.id.videoTime);
             videoThumbnail = itemView.findViewById(R.id.video_thumbnail);
-            userImage = itemView.findViewById(R.id.userImage);
             videoLikeBtn = itemView.findViewById(R.id.video_like_btn);
             favouritePostBtn = itemView.findViewById(R.id.favouritePost);
-
         }
-
-
-
     }
-
 }

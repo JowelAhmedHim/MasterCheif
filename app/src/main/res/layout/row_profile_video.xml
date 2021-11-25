@@ -82,7 +82,7 @@
                     android:layout_height="@dimen/_25sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_10sdp"
-                    app:srcCompat="@drawable/ic_baseline_thumb_up_24"
+                    android:src="@drawable/ic_baseline_thumb_up_24"
                     app:tint="@color/black" />
 
                 <TextView

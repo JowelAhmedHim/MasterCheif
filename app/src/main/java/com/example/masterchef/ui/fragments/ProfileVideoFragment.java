@@ -39,6 +39,8 @@ public class ProfileVideoFragment extends Fragment {
 
     private TextView emptyState;
 
+
+
     public ProfileVideoFragment(String mTitle) {
         // Required empty public constructor
         this.title = mTitle;

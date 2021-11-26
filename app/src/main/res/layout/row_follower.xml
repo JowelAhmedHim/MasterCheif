@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/headerLayout"
+        android:padding="@dimen/_4sdp">
+
+        <View
+            android:id="@+id/viewSupporter"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@id/userImage"/>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/background_tv_show"
+            android:paddingBottom="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/userName"
+            tools:layout_editor_absoluteX="5dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImage"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:scaleType="centerCrop"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:id="@+id/onlineStatus"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/online_status_background"
+            app:layout_constraintBottom_toBottomOf="@+id/userImage"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:paddingTop="@dimen/_8sdp"
+            tools:text="Jowel Ahmed"
+            android:textSize="@dimen/_16sdp"
+            android:textColor="@color/colorTextPrimary"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:fontFamily="@font/ubuntu_bold"
+            android:includeFontPadding="false"
+            app:layout_constraintEnd_toEndOf="@id/view"
+            app:layout_constraintStart_toEndOf="@+id/userImage"
+            app:layout_constraintTop_toTopOf="@id/userImage"/>
+
+        <TextView
+            android:id="@+id/userEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_5sdp"
+            tools:text="Abc@gmail.com"
+            android:textColor="@color/colorTextOther"
+            android:textSize="@dimen/_12sdp"
+            android:fontFamily="@font/ubuntu_regular"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/userName"
+            app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+        <ImageView
+            android:id="@+id/followUser"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_baseline_person_add_24"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="@+id/viewSupporter"
+            app:layout_constraintTop_toBottomOf="@+id/userEmail" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

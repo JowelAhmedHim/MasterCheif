@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -25,14 +26,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String name,email,image,status;
+    private String name, email, image, status;
 
-    private ImageView userImage,onlineStatus,followUser,imageBack;
-    private TextView userName,userEmail,userDetails;
+    private ImageView userImage, onlineStatus, followUser, imageBack;
+    private TextView userName, userEmail, userDetails;
 
     private RecyclerView recyclerView;
     private AdapterUserProfile adapterUserProfile;
@@ -41,6 +43,10 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView emptyState;
 
     private FirebaseAuth firebaseAuth;
+
+    private Boolean mFollow =false;
+    private String userId,myUid;
+    private DatabaseReference followRef;
 
 
     @Override
@@ -55,6 +61,8 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        myUid = firebaseAuth.getCurrentUser().getUid();
+        followRef = FirebaseDatabase.getInstance().getReference().child("Followers");
 
         //show newest post first
         linearLayoutManager.setStackFromEnd(true);
@@ -62,41 +70,51 @@ public class ProfileActivity extends AppCompatActivity {
 
         //get userId
         Intent intent = getIntent();
-        if (intent != null){
-            String userId = intent.getStringExtra("userId");
+        if (intent != null) {
+            userId = intent.getStringExtra("userId");
+
             if (!userId.equals(firebaseAuth.getCurrentUser().getUid())) {
                 loadUserDetail(userId);
                 loadVideoInfo(userId);
-            }else {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            } else {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
 
         }
 
-        followUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFollowing();
-            }
-        });
+        followUser.setOnClickListener(this);
+        imageBack.setOnClickListener(this);
 
-        imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
+        setFollowImage();
 
     }
-    private void init(){
-        userImage =findViewById(R.id.userImage);
-        userName =findViewById(R.id.userName);
-        userEmail =findViewById(R.id.userEmail);
+
+
+
+    private void init() {
+        userImage = findViewById(R.id.userImage);
+        userName = findViewById(R.id.userName);
+        userEmail = findViewById(R.id.userEmail);
         onlineStatus = findViewById(R.id.onlineStatus);
         followUser = findViewById(R.id.followUser);
         recyclerView = findViewById(R.id.recyclerview);
         emptyState = findViewById(R.id.emptyState);
         imageBack = findViewById(R.id.imageBack);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.imageBack:
+                onBackPressed();
+                break;
+            case R.id.followUser:
+                addFollowing();
+                break;
+        }
+
     }
 
 
@@ -110,19 +128,19 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         modelVideos.clear();
-                        for (DataSnapshot ds: snapshot.getChildren()){
+                        for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelVideo modelVideo = ds.getValue(ModelVideo.class);
                             modelVideos.add(modelVideo);
                         }
 
-                        if (modelVideos.isEmpty()){
+                        if (modelVideos.isEmpty()) {
                             recyclerView.setVisibility(View.GONE);
                             emptyState.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             recyclerView.setVisibility(View.VISIBLE);
                             emptyState.setVisibility(View.GONE);
                             //setup Adapter
-                            adapterUserProfile = new AdapterUserProfile(getApplicationContext(),modelVideos);
+                            adapterUserProfile = new AdapterUserProfile(getApplicationContext(), modelVideos);
                             recyclerView.setAdapter(adapterUserProfile);
                         }
                     }
@@ -135,19 +153,18 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-
     private void loadUserDetail(String userId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.orderByChild("uid").equalTo(userId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot ds: snapshot.getChildren()){
+                        for (DataSnapshot ds : snapshot.getChildren()) {
                             //get data
-                            name = ""+ds.child("name").getValue();
-                            email= ""+ds.child("email").getValue();
-                            image = ""+ds.child("profileImage").getValue();
-                            status = ""+ds.child("online").getValue();
+                            name = "" + ds.child("name").getValue();
+                            email = "" + ds.child("email").getValue();
+                            image = "" + ds.child("profileImage").getValue();
+                            status = "" + ds.child("online").getValue();
 
                             //setData
                             userName.setText(name);
@@ -155,13 +172,13 @@ public class ProfileActivity extends AppCompatActivity {
 
                             try {
                                 Picasso.get().load(image).into(userImage);
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 userImage.setImageResource(R.drawable.ic_baseline_person_24);
                             }
 
-                            if (status.equals("false")){
+                            if (status.equals("false")) {
                                 onlineStatus.setImageResource(R.drawable.offline_status_background);
-                            }else {
+                            } else {
                                 onlineStatus.setImageResource(R.drawable.online_status_background);
                             }
 
@@ -175,8 +192,54 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
-
     private void addFollowing() {
+
+        mFollow= true;
+
+        followRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (mFollow){
+                    if (snapshot.child(userId).hasChild(myUid)){
+                        //already follow, so remove follow
+                        followRef.child(userId).removeValue();
+                    }else {
+                        followRef.child(userId).child(myUid).setValue("Follow");
+                    }
+                    mFollow = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
+
+    private void setFollowImage() {
+
+        followRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child(userId).hasChild(myUid)){
+                    followUser.setImageResource(R.drawable.ic_baseline_person_24);
+                    followUser.setColorFilter(Color.GREEN);
+                }else {
+                    followUser.setImageResource(R.drawable.ic_baseline_person_add_24);
+                    followUser.setColorFilter(Color.GRAY);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
 
 }

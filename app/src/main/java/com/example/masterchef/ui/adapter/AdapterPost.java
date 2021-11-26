@@ -162,7 +162,6 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         myViewHolder.favouritePostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show();
                 mVideoFab = true;
                 favRef.addValueEventListener(new ValueEventListener() {
                     @Override

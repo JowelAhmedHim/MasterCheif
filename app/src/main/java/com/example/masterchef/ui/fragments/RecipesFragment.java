@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.masterchef.R;
@@ -27,12 +29,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class RecipesFragment extends Fragment implements PostListener {
+public class RecipesFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;
+
     private RecyclerView recyclerView;
     private AdapterPost adapterPost;
     private ArrayList<ModelVideo> postList;
+    private ProgressBar progressBar;
+    private TextView emptyState;
 
 
     public RecipesFragment() {
@@ -46,8 +50,8 @@ public class RecipesFragment extends Fragment implements PostListener {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_recipes, container, false);
 
-        //init
-        firebaseAuth = FirebaseAuth.getInstance();
+        progressBar = view.findViewById(R.id.progress_bar);
+        emptyState = view.findViewById(R.id.emptyState);
 
         //recyclerview view its property
         recyclerView = view.findViewById(R.id.recyclerview);
@@ -65,11 +69,12 @@ public class RecipesFragment extends Fragment implements PostListener {
         // load all video from database
         loadVideoPost();
 
-
         return view;
     }
 
     private void loadVideoPost() {
+
+        progressBar.setVisibility(View.VISIBLE);
 
         //path of all videos
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("VideoPosts");
@@ -78,6 +83,7 @@ public class RecipesFragment extends Fragment implements PostListener {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 postList.clear();
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
 
@@ -86,12 +92,21 @@ public class RecipesFragment extends Fragment implements PostListener {
                     //getting data from firebase add data in array list
                     postList.add(modelPost);
 
+                    if (postList.isEmpty()){
+                        progressBar.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    }else {
+                        progressBar.setVisibility(View.GONE);
+                        emptyState.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+
                     //adapter
                     adapterPost = new AdapterPost(getActivity(),postList);
 
                     //setAdapter to recyclerview
                     recyclerView.setAdapter(adapterPost);
-
 
                 }
             }
@@ -103,8 +118,5 @@ public class RecipesFragment extends Fragment implements PostListener {
         });
     }
 
-    @Override
-    public void onPostClicked(ModelVideo modelVideo) {
 
-    }
 }

@@ -10,15 +10,28 @@
      android:id="@+id/recyclerViewUserVideos"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
+     android:visibility="gone"
      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
      tools:listitem="@layout/row_user_video_item"/>
 
- <TextView
-     android:id="@+id/emptyState"
+ <ProgressBar
+     android:id="@+id/progress_bar"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:visibility="gone"
-     android:text="you have no video"
      android:layout_centerInParent="true"/>
+
+ <TextView
+     android:id="@+id/emptyState"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_centerInParent="true"
+     android:text="Chef,No recipes"
+     android:fontFamily="@font/ubuntu_bold"
+     android:textAllCaps="true"
+     android:textColor="@color/salmon"
+     android:gravity="center"
+     android:textAppearance="@style/TextAppearance.AppCompat.Title"
+     android:visibility="gone"/>
 
 </RelativeLayout>

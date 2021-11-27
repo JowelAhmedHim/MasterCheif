@@ -36,6 +36,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
 
     private Context context;
     private ArrayList<ModelVideo> postList;
+
     private LayoutInflater layoutInflater;
 
 
@@ -45,6 +46,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
     private DatabaseReference userRef;
     private DatabaseReference postRef;
     private DatabaseReference favRef;
+    private DatabaseReference rankRef;
 
     boolean mVideoLike = false;
     boolean mVideoFab = false;
@@ -59,6 +61,8 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         postRef = FirebaseDatabase.getInstance().getReference().child("VideoPosts");
         userRef = FirebaseDatabase.getInstance().getReference("Users");
         favRef = FirebaseDatabase.getInstance().getReference().child("Favourite");
+        rankRef = FirebaseDatabase.getInstance().getReference().child("Ranks");
+
 
     }
 
@@ -118,10 +122,12 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         setLikes(myViewHolder, videoId);
         setFav(myViewHolder, videoId);
 
+
         //add like for this video in firebase
         myViewHolder.videoLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final int videoPostLike = Integer.parseInt(videLike);
 
                 mVideoLike = true;
@@ -133,17 +139,21 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (mVideoLike) {
                             if (dataSnapshot.child(videoPostId).hasChild(myUid)) {
+
+                                int updatePostLike = videoPostLike -1;
                                 //already liked, so remove like
-                                postRef.child(videoPostId).child("videoLike").setValue("" + (videoPostLike - 1));
-//                                postRef.child(videoPostId).child("userPopularity").setValue(""+(p-1));
-                                likeRef.child(videoPostId).child(myUid).removeValue();
-//                                userRef.child(modelPosts.getUid()).child("popularity").setValue(""+(p-1));
+                                postRef.child(videoPostId).child("videoLike").setValue("" +updatePostLike);
+                                likeRef.child(videoPostId).child("score").setValue(1);
+
 
                             } else {
-                                postRef.child(videoPostId).child("videoLike").setValue("" + (videoPostLike + 1));
-//                                postRef.child(videoPostId).child("userPopularity").setValue(""+(p+1));
-//                                userRef.child(modelPosts.getUid()).child("popularity").setValue(""+(p+1));
+
+                                int updatePostLike = videoPostLike +1;
+                                postRef.child(videoPostId).child("videoLike").setValue("" + updatePostLike);
                                 likeRef.child(videoPostId).child(myUid).setValue("Liked");
+
+                                rankRef.child(userId).setValue(""+myUid);
+
                             }
                             mVideoLike = false;
                         }

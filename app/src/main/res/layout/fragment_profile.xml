@@ -39,7 +39,7 @@
             app:civ_border_color="#FFFFFF"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/recipedefault"/>
 
         <TextView
             android:id="@+id/userName"

@@ -4,16 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/recipedefault"
-    android:gravity="bottom|center"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".ui.activities.SplashScreen">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/recipedefault"/>
 
     <ProgressBar
         android:id="@+id/Pbar"
-        style="@android:style/Widget.ProgressBar.Horizontal"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_80sdp"
+        android:layout_margin="@dimen/_20sdp"
         android:progressTint="@color/salmon" />
 
 </LinearLayout>

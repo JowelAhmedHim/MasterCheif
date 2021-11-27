@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.masterchef.R;
@@ -28,13 +30,13 @@ import java.util.ArrayList;
 
 public class FavouriteFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;
     private RecyclerView recyclerView;
     private AdapterPost adapterPost;
     private ArrayList<ModelVideo> postList;
+    private TextView emptyState;
+    private ProgressBar progressBar;
 
     private String uid;
-
 
     public FavouriteFragment() {
         // Required empty public constructor
@@ -47,8 +49,8 @@ public class FavouriteFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_favourite, container, false);
 
-        //init
-        firebaseAuth = FirebaseAuth.getInstance();
+        progressBar = view.findViewById(R.id.progress_bar);
+        emptyState = view.findViewById(R.id.emptyState);
 
         //recyclerview view its property
         recyclerView = view.findViewById(R.id.recyclerview);
@@ -73,8 +75,8 @@ public class FavouriteFragment extends Fragment {
                 for (DataSnapshot ds: snapshot.getChildren()){
                     String postId = ""+ds.getRef().getKey();
                     getUserInfo(postId);
-                }
 
+                }
             }
 
             @Override
@@ -82,8 +84,6 @@ public class FavouriteFragment extends Fragment {
 
             }
         });
-
-
 
         return view;
     }
@@ -101,10 +101,18 @@ public class FavouriteFragment extends Fragment {
 
                             //getting data from firebase add data in array list
                             postList.add(modelPost);
+                            if (postList.isEmpty()){
+                                Toast.makeText(getContext(), "Empty", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.GONE);
+                            }else {
+                                progressBar.setVisibility(View.GONE);
+
+                                recyclerView.setVisibility(View.VISIBLE);
+                            }
 
                             //adapter
                             adapterPost = new AdapterPost(getActivity(),postList);
-
 
                             //setAdapter to recyclerview
                             recyclerView.setAdapter(adapterPost);

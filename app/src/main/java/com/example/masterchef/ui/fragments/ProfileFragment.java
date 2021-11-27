@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.masterchef.R;
 import com.example.masterchef.ui.activities.EditProfile;
@@ -43,7 +44,10 @@ public class ProfileFragment extends Fragment {
 
 
     private FirebaseAuth firebaseAuth;
+    private String myUid;
     private ProgressDialog progressDialog;
+
+    private int result = 0;
 
 
 
@@ -68,6 +72,7 @@ public class ProfileFragment extends Fragment {
 
         progressDialog = new ProgressDialog(getActivity());
         firebaseAuth = FirebaseAuth.getInstance();
+        myUid = firebaseAuth.getCurrentUser().getUid();
 
 
         userImage =view.findViewById(R.id.userImage);
@@ -107,8 +112,10 @@ public class ProfileFragment extends Fragment {
             startActivity(new Intent(getActivity(), SignInActivity.class));
         }else {
             loadUserInfo();
+
         }
     }
+
 
     //get user info from firebase
     private void loadUserInfo() {

@@ -176,12 +176,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
                 });
+
+
     }
 
     private void checkUser() {
 
         FirebaseUser user = auth.getCurrentUser();
         if (user == null){
+
             startActivity(new Intent(MainActivity.this, AppInfo.class));
             finish();
         }else {
@@ -203,15 +206,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             String profileImage = ""+ds.child("profileImage").getValue();
                             String accountType = ""+ds.child("accountType").getValue();
 
-//                            //set user data to view
-//                            userName.setText(name);
-//                            userEmail.setText(email);
-//                            try {
-//                                Picasso.get().load(profileImage).into(userImage);
-//
-//                            }catch (Exception e){
-//                                userImage.setImageResource(R.drawable.ic_baseline_person_24);
-//                            }
                         }
                     }
 

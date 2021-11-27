@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class ProfileFollowerFragment extends Fragment {
    private ArrayList<ModelUser> followerList;
    private FirebaseAuth firebaseAuth;
    private String myUid;
+   private ProgressBar progressBar;
 
 
 
@@ -51,10 +53,15 @@ public class ProfileFollowerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_followe, container, false);
 
+        //view init
+        progressBar = view.findViewById(R.id.progress_bar);
         emptyState = view.findViewById(R.id.emptyState);
+
+        //firebase initialization
         firebaseAuth = FirebaseAuth.getInstance();
         myUid = firebaseAuth.getCurrentUser().getUid();
 
+        //recyclerview setup
         recyclerView = view.findViewById(R.id.recyclerviewFollower);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -75,10 +82,8 @@ public class ProfileFollowerFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
               for (DataSnapshot ds: snapshot.getChildren()){
-
                   String id = ""+ds.getRef().getKey();
                   loadFollowerInfo(id);
-
               }
 
             }
@@ -102,9 +107,11 @@ public class ProfileFollowerFragment extends Fragment {
                     ModelUser modelFollower = ds.getValue(ModelUser.class);
                     followerList.add(modelFollower);
                     if (followerList.isEmpty()){
+                        progressBar.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.GONE);
                         emptyState.setVisibility(View.VISIBLE);
                     }else {
+                        progressBar.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                         emptyState.setVisibility(View.GONE);
                     }

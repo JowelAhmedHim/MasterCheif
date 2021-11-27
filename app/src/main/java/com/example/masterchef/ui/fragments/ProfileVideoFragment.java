@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.masterchef.R;
@@ -35,10 +36,9 @@ public class ProfileVideoFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelVideo> videoArrayList;
     private AdapterVideo adapterVideo;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
 
     private TextView emptyState;
-
 
 
     public ProfileVideoFragment(String mTitle) {
@@ -58,6 +58,7 @@ public class ProfileVideoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        progressBar = view.findViewById(R.id.progress_bar);
         emptyState = view.findViewById(R.id.emptyState);
         firebaseAuth = FirebaseAuth.getInstance();
         recyclerViewUserVideos = view.findViewById(R.id.recyclerViewUserVideos);
@@ -71,36 +72,34 @@ public class ProfileVideoFragment extends Fragment {
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("VideoPosts");
         databaseReference.orderByChild("uid").equalTo(firebaseAuth.getUid())
-            .addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    videoArrayList.clear();
-                    for (DataSnapshot ds : dataSnapshot.getChildren()){
-                        ModelVideo modelVideo = ds.getValue(ModelVideo.class);
-                        videoArrayList.add(modelVideo);
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        videoArrayList.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            ModelVideo modelVideo = ds.getValue(ModelVideo.class);
+                            videoArrayList.add(modelVideo);
+                        }
+                        if (videoArrayList.isEmpty()) {
+                            progressBar.setVisibility(View.GONE);
+                            recyclerViewUserVideos.setVisibility(View.GONE);
+                            emptyState.setVisibility(View.VISIBLE);
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            recyclerViewUserVideos.setVisibility(View.VISIBLE);
+                            emptyState.setVisibility(View.GONE);
+                            //setup adapter
+                            adapterVideo = new AdapterVideo(getContext(), videoArrayList);
+                            recyclerViewUserVideos.setAdapter(adapterVideo);
+                        }
+
                     }
-                    if (videoArrayList.isEmpty()){
-                        recyclerViewUserVideos.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.VISIBLE);
-                    }else {
-                        recyclerViewUserVideos.setVisibility(View.VISIBLE);
-                        emptyState.setVisibility(View.GONE);
-                        //setup adapter
-                        adapterVideo = new AdapterVideo(getContext(),videoArrayList);
-                        recyclerViewUserVideos.setAdapter(adapterVideo);
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
-
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-
-
+                });
 
     }
 }

@@ -45,7 +45,6 @@ public class AppInfo extends AppCompatActivity implements View.OnClickListener {
                 intent = new Intent(AppInfo.this,SignUpActivity.class);
                 startActivity(intent);
                 break;
-
         }
 
     }

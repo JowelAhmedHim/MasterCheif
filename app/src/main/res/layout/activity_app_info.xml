@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textColor="@color/salmon"
+        android:textAllCaps="true"
         android:fontFamily="@font/ubuntu_bold"
         android:textSize="@dimen/_25sdp"/>
 
@@ -25,7 +26,7 @@
         android:textSize="@dimen/_12sdp"
         android:layout_gravity="center"
         android:fontFamily="@font/ubuntu_medium"
-        android:textColor="@color/salmon"
+        android:textColor="#009688"
         android:justificationMode="inter_word"/>
 
     <ImageView

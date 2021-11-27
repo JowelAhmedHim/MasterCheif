@@ -41,13 +41,13 @@
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/drawable/offline_status_background.xml" value="0.403125" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/drawable/online_status_background.xml" value="0.403125" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_admin.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_app_info.xml" value="0.5" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_app_info.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_edit_profile.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_main.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_movie_player.xml" value="0.22" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_profile.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_setting.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_sign_in.xml" value="0.33" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_sign_in.xml" value="0.5" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_sign_up.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_splash_screen.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/activity_upload_video.xml" value="0.35104166666666664" />
@@ -76,7 +76,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.38697916666666665" />
+        <option name="scale" value="0.33" />
       </ProjectState>
     </option>
   </component>

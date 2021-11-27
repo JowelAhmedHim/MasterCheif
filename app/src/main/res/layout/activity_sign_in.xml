@@ -13,9 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Welcome,"
+        android:textAllCaps="true"
         android:textColor="@color/salmon"
         android:textSize="@dimen/_25sdp"
-        android:fontFamily="@font/ubuntu_bold"
+        android:fontFamily="@font/ubuntu_regular"
         android:gravity="center"/>
 
     <TextView
@@ -24,6 +25,7 @@
         android:text="@string/app_name"
         android:textSize="@dimen/_25sdp"
         android:textColor="@color/salmon"
+        android:textAllCaps="true"
         android:fontFamily="@font/ubuntu_bold"
         android:layout_marginBottom="@dimen/_10sdp"
         android:gravity="center"/>

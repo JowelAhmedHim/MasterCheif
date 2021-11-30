@@ -47,10 +47,10 @@ public class AdapterFollower extends RecyclerView.Adapter<AdapterFollower.Follow
     @NonNull
     @Override
     public FollowerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (layoutInflater == null){
+        if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(context);
         }
-        View view = layoutInflater.inflate(R.layout.row_follower,parent,false);
+        View view = layoutInflater.inflate(R.layout.row_follower, parent, false);
         return new FollowerViewHolder(view);
     }
 
@@ -60,42 +60,42 @@ public class AdapterFollower extends RecyclerView.Adapter<AdapterFollower.Follow
         ModelUser modelUser = userList.get(position);
 
         //getData
-        String userId = ""+modelUser.getUid();
-        String userName = ""+modelUser.getName();
-        String userEmail = ""+modelUser.getEmail();
-        String userImage = ""+modelUser.getProfileImage();
-        String onlineStatus = ""+modelUser.getOnline();
+        String userId = "" + modelUser.getUid();
+        String userName = "" + modelUser.getName();
+        String userEmail = "" + modelUser.getEmail();
+        String userImage = "" + modelUser.getProfileImage();
+        String onlineStatus = "" + modelUser.getOnline();
 
         //setData
         holder.userName.setText(userName);
         holder.userEmail.setText(userEmail);
         try {
             Picasso.get().load(userImage).into(holder.profileImage);
-        }catch (Exception e){
+        } catch (Exception e) {
             holder.profileImage.setImageResource(R.drawable.ic_baseline_person_24);
         }
         if (onlineStatus.equals("false")) {
-           holder.online_status.setImageResource(R.drawable.offline_status_background);
+            holder.online_status.setImageResource(R.drawable.offline_status_background);
         } else {
             holder.online_status.setImageResource(R.drawable.online_status_background);
         }
 
-        setFollowImage(holder,userId);
+        setFollowImage(holder, userId);
 
 
         holder.followIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFollow= true;
+                mFollow = true;
 
                 followRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (mFollow){
-                            if (snapshot.child(userId).hasChild(myUid)){
+                        if (mFollow) {
+                            if (snapshot.child(userId).hasChild(myUid)) {
                                 //already follow, so remove follow
                                 followRef.child(userId).removeValue();
-                            }else {
+                            } else {
                                 followRef.child(userId).child(myUid).setValue("Follow");
                             }
                             mFollow = false;
@@ -113,15 +113,16 @@ public class AdapterFollower extends RecyclerView.Adapter<AdapterFollower.Follow
 
 
     }
+
     private void setFollowImage(FollowerViewHolder holder, String userId) {
 
         followRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child(userId).hasChild(myUid)){
-                   holder.followIv.setImageResource(R.drawable.ic_baseline_person_24);
-                   holder.followIv.setColorFilter(Color.GREEN);
-                }else {
+                if (snapshot.child(userId).hasChild(myUid)) {
+                    holder.followIv.setImageResource(R.drawable.ic_baseline_person_24);
+                    holder.followIv.setColorFilter(Color.GREEN);
+                } else {
                     holder.followIv.setImageResource(R.drawable.ic_baseline_person_add_24);
                     holder.followIv.setColorFilter(Color.GRAY);
                 }
@@ -140,10 +141,10 @@ public class AdapterFollower extends RecyclerView.Adapter<AdapterFollower.Follow
         return userList.size();
     }
 
-    public class FollowerViewHolder extends RecyclerView.ViewHolder{
+    public class FollowerViewHolder extends RecyclerView.ViewHolder {
 
-       private ImageView profileImage,online_status,followIv;
-       private TextView userName,userEmail;
+        private ImageView profileImage, online_status, followIv;
+        private TextView userName, userEmail;
 
 
         public FollowerViewHolder(@NonNull View itemView) {

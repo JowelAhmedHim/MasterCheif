@@ -13,6 +13,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -144,12 +146,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_logout:
-                makeOffline();
-                break;
 
         }
         drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+
+    private void checkUser() {
+
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null){
+            startActivity(new Intent(MainActivity.this, AppInfo.class));
+            finish();
+        }else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RecipesFragment()).commit();
+            bottomNavigationView.setSelectedItemId(R.id.recipes);
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+        {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else{
+            AlertDialog.Builder alertdialog = new AlertDialog.Builder(this);
+            alertdialog.setTitle("Do you want to exit?");
+            alertdialog.setPositiveButton("Yes", (dialog, which) -> {
+                super.onBackPressed();
+            });
+            alertdialog.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+            AlertDialog alertDialog =alertdialog.create();
+            alertDialog.show();
+
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.top_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout:
+                makeOffline();
+                break;
+        }
         return true;
     }
 
@@ -176,65 +227,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
                 });
-
-
-    }
-
-    private void checkUser() {
-
-        FirebaseUser user = auth.getCurrentUser();
-        if (user == null){
-
-            startActivity(new Intent(MainActivity.this, AppInfo.class));
-            finish();
-        }else {
-            loadMyInfo();
-        }
-    }
-
-    private void loadMyInfo() {
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.orderByChild("uid").equalTo(auth.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot ds: snapshot.getChildren()){
-                            //get user data
-                            String name = ""+ds.child("name").getValue();
-                            String email = ""+ds.child("email").getValue();
-                            String profileImage = ""+ds.child("profileImage").getValue();
-                            String accountType = ""+ds.child("accountType").getValue();
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-    }
-
-
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START))
-        {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else{
-            AlertDialog.Builder alertdialog = new AlertDialog.Builder(this);
-            alertdialog.setTitle("Do you want to exit?");
-            alertdialog.setPositiveButton("Yes", (dialog, which) -> {
-                super.onBackPressed();
-            });
-            alertdialog.setNegativeButton("No", (dialog, which) -> dialog.cancel());
-            AlertDialog alertDialog =alertdialog.create();
-            alertDialog.show();
-
-        }
 
     }
 }

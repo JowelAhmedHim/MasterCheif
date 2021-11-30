@@ -98,28 +98,27 @@ public class ProfileFollowerFragment extends Fragment {
     private void loadFollowerInfo(String id) {
 
         followerList = new ArrayList<>();
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-        databaseReference.orderByChild("uid").equalTo(id).addValueEventListener(new ValueEventListener() {
+        databaseReference.orderByChild("uid").equalTo(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 followerList.clear();
                 for (DataSnapshot ds: snapshot.getChildren()){
                     ModelUser modelFollower = ds.getValue(ModelUser.class);
                     followerList.add(modelFollower);
-                    if (followerList.isEmpty()){
-                        progressBar.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.VISIBLE);
-                    }else {
-                        progressBar.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
-                        emptyState.setVisibility(View.GONE);
-                    }
-
+                }
+                if (followerList.isEmpty()){
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                }else {
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
 
                     adapterFollower = new AdapterFollower(getContext(),followerList);
                     recyclerView.setAdapter(adapterFollower);
-
                 }
             }
 

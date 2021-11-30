@@ -322,28 +322,10 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
         //image deleted, upload new image
         //save info with image
-        String  thumbnailFilename = "Thumbnails/"+""+firebaseAuth.getUid();
+        String  thumbnailFilename = "Thumbnails/"+ "thumbnail_"+timestamp;
 
-//        if (!videoThumbnail.equals("")){
-//            //with image
-//            updateWasWithImage();
-//        }else if (thumbnailIv.getDrawable()!=null){
-//            //with image
-//            updateWithNowImage();
-//        }else {
-//            Toast.makeText(getApplicationContext(), "Please select an Thumbnail for Video ", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        if (thumbnailIv.getDrawable() != null){
-//            //get image from bitmap
-//            Bitmap bitmap = ((BitmapDrawable)thumbnailIv.getDrawable()).getBitmap();
-//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//            //image compress
-//            bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-//            byte[] data = byteArrayOutputStream.toByteArray();
-//        }
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference(videoFilename);
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference(thumbnailFilename);
         storageReference.putFile(thumbnailUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -356,7 +338,7 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                         if (uriTask.isSuccessful()){
                             //url of upload thumbnail is received
                             //upload image
-                            StorageReference storageReference = FirebaseStorage.getInstance().getReference(thumbnailFilename);
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference(videoFilename);
                             storageReference.putFile(videoUri)
                                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                         @Override
@@ -409,8 +391,8 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                                            double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                                            progressDialog.setMessage("uploaded" +((int)progress)+ "%...");
+                                            double progress = (100.0 * taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                                            progressDialog.setMessage("Uploaded " +((int)progress)+ "%...");
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -437,35 +419,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
 
     }
 
-    private void updateWasWithImage() {
-        //delete previous image;
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(videoThumbnail);
-        storageReference.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-
-                        //image deleted, upload new image
-                        //save info with image
-                        String  thumbnailFilename = "Thumbnails/"+""+firebaseAuth.getUid();
-
-                        // get image from bitmap
-                        Bitmap bitmap = ((BitmapDrawable)thumbnailIv.getDrawable()).getBitmap();
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        //image compress
-                        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-                        byte[] data = byteArrayOutputStream.toByteArray();
-
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-    }
 
     //clear ui data
     private void clearData() {
@@ -520,7 +473,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
     //request storage permission
     private void requestStoragePermission(){
         ActivityCompat.requestPermissions(this,storagePermission,STORAGE_REQUEST_CODE);
-
     }
 
     //check storage permission
@@ -571,7 +523,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
         startActivityForResult(intent,IMAGE_PICK_GALLERY_CODE);
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -594,8 +545,10 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                 if (grantResults.length>0){
                     boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (storageAccepted){
+                        //permission granted
                         pickFromGallery();
                     }else{
+                        //permission denied
                         Toast.makeText(this, "Storage Permission needed", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -612,12 +565,9 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                 case VIDEO_REQUEST_CODE:
                     if (data.getData() != null)
                     {
-
                         //get video uri , realPath, fileName
                         videoUri = data.getData();
                         String realPath = videoUri.getPath();
-                        Toast.makeText(getApplicationContext(), ""+realPath, Toast.LENGTH_SHORT).show();
-
                         String[] projection = {MediaStore.MediaColumns.DISPLAY_NAME};
                         ContentResolver cr = getApplicationContext().getContentResolver();
                         Cursor metaCursor = cr.query(videoUri, projection, null, null, null);
@@ -625,7 +575,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
                             try {
                                 if (metaCursor.moveToFirst()) {
                                    String fileName = metaCursor.getString(0);
-                                    Toast.makeText(getApplicationContext(), ""+fileName, Toast.LENGTH_SHORT).show();
                                     videoTv.setText(fileName);
                                 }
                             } finally {
@@ -656,11 +605,6 @@ public class UploadVideo extends AppCompatActivity implements AdapterView.OnItem
             cursor.moveToNext();
             imageName = cursor.getString(name);
             imageTv.setText(imageName);
-//            try {
-//                Picasso.get().load(thumbnailUri).into(thumbnailIv);
-//            }catch (Exception e){
-//
-//            }
 
         }catch (Exception e){
             Toast.makeText(this, "Something wrong", Toast.LENGTH_SHORT).show();

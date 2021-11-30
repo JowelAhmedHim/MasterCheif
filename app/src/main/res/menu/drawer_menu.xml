@@ -3,19 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn ="navigation_view">
 
-    <item
-        android:id="@+id/nav_home"
-        android:title="Home"
-        android:icon="@drawable/ic_baseline_home_24"/>
+    <group
+        android:checkableBehavior="single">
 
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home"
+            android:icon="@drawable/ic_baseline_home_24"/>
+
+    </group>
     <item
         android:id="@+id/nav_setting"
         android:title="Setting"
         android:icon="@drawable/ic_baseline_settings_24"/>
-    <item
-        android:id="@+id/nav_logout"
-        android:title="Log Out"
-        android:icon="@drawable/ic_baseline_power_settings_new_24"/>
+
 
 
 

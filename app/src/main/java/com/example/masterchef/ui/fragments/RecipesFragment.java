@@ -50,7 +50,8 @@ public class RecipesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_recipes, container, false);
 
-        progressBar = view.findViewById(R.id.progress_bar);
+        //view init
+        progressBar = view.findViewById(R.id.progressBar);
         emptyState = view.findViewById(R.id.emptyState);
 
         //recyclerview view its property
@@ -73,9 +74,7 @@ public class RecipesFragment extends Fragment {
     }
 
     private void loadVideoPost() {
-
         progressBar.setVisibility(View.VISIBLE);
-
         //path of all videos
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("VideoPosts");
 
@@ -83,32 +82,34 @@ public class RecipesFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()){
+                    progressBar.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                }else {
+                    postList.clear();
+                    for (DataSnapshot ds: dataSnapshot.getChildren()){
+                        ModelVideo modelPost = ds.getValue(ModelVideo.class);
+                        //getting data from firebase add data in array list
+                        postList.add(modelPost);
+                        if (postList.isEmpty()){
+                            progressBar.setVisibility(View.GONE);
+                            emptyState.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        }else {
+                            progressBar.setVisibility(View.GONE);
+                            emptyState.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
 
-                postList.clear();
-                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                        //adapter
+                        adapterPost = new AdapterPost(getActivity(),postList);
 
-                    ModelVideo modelPost = ds.getValue(ModelVideo.class);
+                        //setAdapter to recyclerview
+                        recyclerView.setAdapter(adapterPost);
 
-                    //getting data from firebase add data in array list
-                    postList.add(modelPost);
-
-                    if (postList.isEmpty()){
-                        progressBar.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                    }else {
-                        progressBar.setVisibility(View.GONE);
-                        emptyState.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
                     }
-
-                    //adapter
-                    adapterPost = new AdapterPost(getActivity(),postList);
-
-                    //setAdapter to recyclerview
-                    recyclerView.setAdapter(adapterPost);
-
                 }
+
             }
 
             @Override

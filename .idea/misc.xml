@@ -35,6 +35,8 @@
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterChef/app/src/main/res/layout/user_video_items.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterChef/app/src/main/res/menu/bottom_menu.xml" value="0.25462962962962965" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterChef/app/src/main/res/menu/drawer_menu.xml" value="0.22314814814814815" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/drawable/category_background.xml" value="0.25104166666666666" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/drawable/ic_baseline_people_alt_24.xml" value="0.403125" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/drawable/ic_baseline_play_circle_filled_24.xml" value="0.1962962962962963" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/drawable/ic_baseline_play_circle_outline_24.xml" value="0.1962962962962963" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/drawable/ic_baseline_replay_10_24.xml" value="0.19722222222222222" />
@@ -60,10 +62,12 @@
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/fragment_profile_video.xml" value="0.2953125" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/fragment_recipes.xml" value="0.33" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_follower.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_leaderboard_item.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_leaderboard_item.xml" value="0.5" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_profile_video.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_timeline_item.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_timeline_item.xml" value="0.5" />
         <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/layout/row_user_video_item.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/menu/drawer_menu.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/JOWEL/AndroidStudioProjects/MasterCheif/app/src/main/res/menu/top_menu.xml" value="0.38697916666666665" />
       </map>
     </option>
   </component>

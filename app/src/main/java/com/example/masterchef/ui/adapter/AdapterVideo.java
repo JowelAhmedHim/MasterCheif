@@ -3,6 +3,7 @@ package com.example.masterchef.ui.adapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.masterchef.R;
 import com.example.masterchef.services.model.ModelVideo;
+import com.example.masterchef.ui.activities.MoviePlayerActivity;
 import com.example.masterchef.ui.activities.UploadVideo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,6 +36,8 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder> {
 
@@ -68,14 +72,19 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
         String videoThumbnailUri = modelVideo.getVideoThumbnail();
         String videoUri = modelVideo.getVideoUrl();
         String videoTimestamp = modelVideo.getTimeStamp();
-        String videoLike = modelVideo.getVideoLike();
         String uid = modelVideo.getUid();
-        String userName = modelVideo.getUserName();
-        String userEmail = modelVideo.getUserEmail();
-        String userImage = modelVideo.getUserImage();
+
+        //convert timestamp to dd/mm/yyyy hh:mm ap/pm
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.setTimeInMillis(Long.parseLong(videoTimestamp));
+        String time = DateFormat.format("dd/MM/yyy hh:mm aa", calendar).toString();
+
 
         //set data
         holder.videoTitle.setText(videTitle);
+        holder.videoCategory.setText(videoCategory);
+        holder.videoDescription.setText(videDescription);
+        holder.videoTime.setText(time);
         try {
             Picasso.get().load(videoThumbnailUri).into(holder.videoThumbnail);
         }catch (Exception e){
@@ -85,22 +94,30 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
         holder.moreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMoreOption(holder.moreBtn,uid,videoId,videoThumbnailUri,videoUri);
+                showMoreOption(holder,holder.moreBtn,uid,videoId,videoThumbnailUri,videoUri);
+            }
+        });
+        //item clicked listener,send to exoplayer to show video
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MoviePlayerActivity.class);
+                intent.putExtra("videoUrl", "" + videoUri);
+                context.startActivity(intent);
             }
         });
 
-
-
     }
 
-    private void showMoreOption(ImageView moreBtn, String uid, String videoId, String videoThumbnail, String videoUri) {
+
+
+    private void showMoreOption(MyViewHolder holder, ImageView moreBtn, String uid, String videoId, String videoThumbnail, String videoUri) {
 
         //create popup menu
         PopupMenu popupMenu = new PopupMenu(context,moreBtn, Gravity.END);
 
         //add item in menu
         popupMenu.getMenu().add(Menu.NONE,0,0,"Delete");
-        popupMenu.getMenu().add(Menu.NONE,1,1,"Edit");
 
         //item click listener
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -110,14 +127,8 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
                 int id = item.getItemId();
                 if (id == 0){
                     //delete option clicked
-                    beginDelete(videoId,videoThumbnail,videoUri);
+                    beginDelete(holder,videoId,videoThumbnail,videoUri);
                 }
-//                else if (id == 1){
-//                    Intent intent = new Intent(context, UploadVideo.class);
-//                    intent.putExtra("key","editPost");
-//                    intent.putExtra("editPostId",videoId);
-//                    context.startActivity(intent);
-//                }
                 return false;
             }
         });
@@ -125,8 +136,7 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
 
     }
 
-    private void beginDelete(String videoId, String videoThumbnail, String videoUri) {
-
+    private void beginDelete(MyViewHolder holder, String videoId, String videoThumbnail, String videoUri) {
         //progress dialog
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Deleting...");
@@ -151,10 +161,23 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                        for (DataSnapshot ds: dataSnapshot.getChildren()){
                                            //delete value from database where videoId match
-                                           ds.getRef().removeValue();
+                                           ds.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                               @Override
+                                               public void onSuccess(Void unused) {
+                                                   progressDialog.dismiss();
+                                                   notifyItemRemoved(holder.getAdapterPosition());
+                                                   Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show();
+
+                                               }
+                                           }).addOnFailureListener(new OnFailureListener() {
+                                               @Override
+                                               public void onFailure(@NonNull Exception e) {
+                                                   progressDialog.dismiss();
+                                                   Toast.makeText(context, "Deleted Failled", Toast.LENGTH_SHORT).show();
+                                               }
+                                           });
                                        }
-                                       progressDialog.dismiss();
-                                       Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show();
+
                                    }
 
                                    @Override
@@ -162,8 +185,6 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
                                        Toast.makeText(context, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                                    }
                                });
-
-
                            }
                        }).addOnFailureListener(new OnFailureListener() {
                            @Override
@@ -181,8 +202,6 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
 
                     }
                 });
-
-
     }
 
     @Override
@@ -192,8 +211,8 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 
+        private TextView videoTitle, videoDescription,videoTime,videoCategory;
         private ImageView videoThumbnail,moreBtn;
-        private TextView videoTitle;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -201,6 +220,10 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.MyViewHolder
             videoThumbnail = itemView.findViewById(R.id.video_thumbnail);
             videoTitle = itemView.findViewById(R.id.video_title);
             moreBtn = itemView.findViewById(R.id.more_btn);
+            videoDescription = itemView.findViewById(R.id.video_description);
+            videoCategory = itemView.findViewById(R.id.video_category);
+            videoTime = itemView.findViewById(R.id.videoTime);
+            videoThumbnail = itemView.findViewById(R.id.video_thumbnail);
 
         }
     }

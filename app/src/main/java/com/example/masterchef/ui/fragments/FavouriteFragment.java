@@ -52,6 +52,8 @@ public class FavouriteFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         emptyState = view.findViewById(R.id.emptyState);
 
+
+
         //recyclerview view its property
         recyclerView = view.findViewById(R.id.recyclerview);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -67,6 +69,7 @@ public class FavouriteFragment extends Fragment {
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Favourite");
         databaseReference.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -75,7 +78,6 @@ public class FavouriteFragment extends Fragment {
                 for (DataSnapshot ds: snapshot.getChildren()){
                     String postId = ""+ds.getRef().getKey();
                     getUserInfo(postId);
-
                 }
             }
 
@@ -84,9 +86,11 @@ public class FavouriteFragment extends Fragment {
 
             }
         });
-
         return view;
+
     }
+
+
 
     private void getUserInfo(String postId) {
 
@@ -104,10 +108,11 @@ public class FavouriteFragment extends Fragment {
                             if (postList.isEmpty()){
                                 Toast.makeText(getContext(), "Empty", Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
+                                emptyState.setVisibility(View.VISIBLE);
                                 recyclerView.setVisibility(View.GONE);
                             }else {
                                 progressBar.setVisibility(View.GONE);
-
+                                emptyState.setVisibility(View.GONE);
                                 recyclerView.setVisibility(View.VISIBLE);
                             }
 

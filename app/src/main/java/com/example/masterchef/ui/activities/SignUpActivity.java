@@ -304,8 +304,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             hashMap.put("uid",""+firebaseAuth.getUid());
             hashMap.put("email",""+email);
             hashMap.put("name",""+username);
-            hashMap.put("popularity","0");
             hashMap.put("online","true");
+            hashMap.put("popularity","0");
             hashMap.put("timestamp",""+timeStamp);
             hashMap.put("accountType","user");
             hashMap.put("profileImage","");
@@ -353,7 +353,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 hashMap.put("uid",""+firebaseAuth.getUid());
                                 hashMap.put("email",""+email);
                                 hashMap.put("name",""+username);
-//                                hashMap.put("popularity","0");
+                                hashMap.put("popularity","0");
                                 hashMap.put("online","true");
                                 hashMap.put("timestamp",""+timeStamp);
                                 hashMap.put("accountType","user");

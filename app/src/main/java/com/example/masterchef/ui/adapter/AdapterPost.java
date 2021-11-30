@@ -20,6 +20,8 @@ import com.example.masterchef.services.listener.PostListener;
 import com.example.masterchef.services.model.ModelVideo;
 import com.example.masterchef.ui.activities.MoviePlayerActivity;
 import com.example.masterchef.ui.activities.ProfileActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> {
@@ -41,6 +44,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
 
 
     String myUid;
+    int popularity;
 
     private DatabaseReference likeRef;
     private DatabaseReference userRef;
@@ -61,6 +65,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         postRef = FirebaseDatabase.getInstance().getReference().child("VideoPosts");
         userRef = FirebaseDatabase.getInstance().getReference("Users");
         favRef = FirebaseDatabase.getInstance().getReference().child("Favourite");
+
         rankRef = FirebaseDatabase.getInstance().getReference().child("Ranks");
 
 
@@ -105,10 +110,12 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
         //set data
         myViewHolder.videTitle.setText(videoTitle);
         myViewHolder.videoDescription.setText(videoDescription);
+        myViewHolder.videoCategory.setText(videoCategory);
         myViewHolder.videoLikeTxt.setText(videLike);
         myViewHolder.videoTime.setText(time);
         myViewHolder.userName.setText(userName);
         myViewHolder.userCity.setText(userEmail);
+
 
         try {
             Picasso.get().load(videoThumbnailUri).into(myViewHolder.videoThumbnail);
@@ -140,21 +147,17 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
                         if (mVideoLike) {
                             if (dataSnapshot.child(videoPostId).hasChild(myUid)) {
 
-                                int updatePostLike = videoPostLike -1;
                                 //already liked, so remove like
-                                postRef.child(videoPostId).child("videoLike").setValue("" +updatePostLike);
-                                likeRef.child(videoPostId).child("score").setValue(1);
+                                postRef.child(videoPostId).child("videoLike").setValue(""+(videoPostLike-1));
+                                likeRef.child(videoPostId).child(myUid).removeValue();
 
 
                             } else {
-
-                                int updatePostLike = videoPostLike +1;
-                                postRef.child(videoPostId).child("videoLike").setValue("" + updatePostLike);
+                                postRef.child(videoPostId).child("videoLike").setValue(""+(videoPostLike+1));
                                 likeRef.child(videoPostId).child(myUid).setValue("Liked");
 
-                                rankRef.child(userId).setValue(""+myUid);
-
                             }
+
                             mVideoLike = false;
                         }
                     }
@@ -220,7 +223,6 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             }
         });
 
-
     }
 
     private void showUserDetail(String userId) {
@@ -255,8 +257,10 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child(myUid).hasChild(videoId)) {
+                    myViewHolder.favouritePostBtn.setImageResource(R.drawable.ic_baseline_favorite_24);
                     myViewHolder.favouritePostBtn.setColorFilter(Color.RED);
                 } else {
+                    myViewHolder.favouritePostBtn.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                     myViewHolder.favouritePostBtn.setColorFilter(Color.BLACK);
                 }
             }
@@ -275,7 +279,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView videTitle, videoDescription, videoLikeTxt, videoTime, userName, userCity;
+        private TextView videTitle, videoDescription, videoLikeTxt, videoTime, userName, userCity,videoCategory;
         private ImageView videoThumbnail, userImage, videoLikeBtn, favouritePostBtn;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -283,6 +287,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.MyViewHolder> 
 
             videTitle = itemView.findViewById(R.id.video_title);
             videoDescription = itemView.findViewById(R.id.video_description);
+            videoCategory = itemView.findViewById(R.id.video_category);
             videoLikeTxt = itemView.findViewById(R.id.video_like_txt);
             userName = itemView.findViewById(R.id.userName);
             userCity = itemView.findViewById(R.id.userCity);

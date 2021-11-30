@@ -32,7 +32,7 @@
                 android:background="@drawable/edittext_background1"
                 android:hint="Video Title"
                 android:inputType="text"
-                android:maxLength="100"
+                android:maxLength="30"
                 android:padding="10dp" />
 
             <EditText
@@ -45,7 +45,7 @@
                 android:hint="Video Description"
                 android:inputType="textMultiLine"
                 android:maxLines="5"
-                android:minHeight="100dp"
+                android:maxLength="100"
                 android:padding="10dp"
                 android:scrollbars="vertical" />
 

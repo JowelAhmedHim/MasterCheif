@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/_10sdp"
     android:elevation="@dimen/_4sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_10sdp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,20 +45,20 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    tools:text="Jowel Ahmed"
-                    android:textSize="@dimen/_16sdp"/>
+                    android:textSize="@dimen/_16sdp"
+                    tools:text="Jowel Ahmed" />
 
 
                 <TextView
-                        android:id="@+id/userCity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        tools:text="Abc@gmail.com"
+                    android:id="@+id/userCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textColor="@color/teal_700"
                     android:textSize="@dimen/_10sdp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorTextSecondary"
-                        android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="Abc@gmail.com" />
 
             </LinearLayout>
 
@@ -68,24 +68,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/video_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="How to make Pizza"
-                android:textColor="@color/brightGray"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/ubuntu_bold"
-             android:textSize="@dimen/_14sdp"
-                android:layout_marginTop="@dimen/_10sdp"/>
+                android:textColor="@color/brightGray"
+                android:textSize="@dimen/_14sdp"
+                tools:text="How to make Pizza" />
+
+            <TextView
+                android:id="@+id/video_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_5sdp"
+                android:drawableStart="@drawable/ic_baseline_fastfood_24"
+                android:background="@drawable/category_background"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp"
+                tools:text="Pizza" />
+
             <TextView
                 android:id="@+id/video_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_regular"
-                tools:text="So famous recipe without it dinner is uncompleted"
                 android:layout_marginTop="@dimen/_3sdp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:textColor="@color/grey_40"
                 android:textSize="@dimen/_12sdp"
-                android:textColor="@color/grey_40"/>
+                tools:text="So famous recipe without it dinner is uncompleted" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,11 +114,12 @@
                     android:layout_height="@dimen/_100sdp"
                     android:scaleType="fitXY"
                     tools:src="@drawable/food" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_play_circle_outline_24"
                     android:layout_centerInParent="true"
+                    android:src="@drawable/ic_baseline_play_circle_outline_24"
                     app:tint="@color/white" />
             </RelativeLayout>
         </LinearLayout>
@@ -140,31 +158,33 @@
                     android:id="@+id/video_like_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    tools:text="100"
-                    android:textSize="@dimen/_12sdp"
                     android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center_vertical"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                    android:textColor="@color/grey_40" />
+                    android:textColor="@color/grey_40"
+                    android:textSize="@dimen/_12sdp"
+                    tools:text="100" />
 
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/favouritePost"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
-                android:src="@drawable/ic_baseline_favorite_24"
+                android:src="@drawable/ic_baseline_favorite_border_24"
                 app:tint="@color/black" />
+
             <TextView
                 android:id="@+id/videoTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="end|right"
-                android:text="3h ago"
                 android:fontFamily="@font/ubuntu_medium"
-                android:textSize="@dimen/_12sdp"
+                android:gravity="end|right"
                 android:maxLines="1"
-                android:textColor="@color/grey_40" />
+                android:text="3h ago"
+                android:textColor="@color/grey_40"
+                android:textSize="@dimen/_12sdp" />
 
         </LinearLayout>
 

@@ -31,6 +31,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -40,6 +42,8 @@ public class ProfileFragment extends Fragment {
 
     private ImageView userImage,editProfile;
     private TextView userName,userEmail,userDetails;
+
+    private ArrayList<String> arrayList;
 
 
 
@@ -100,9 +104,11 @@ public class ProfileFragment extends Fragment {
                         tab.setText(tabTitle[position]);
                     }
                 }).attach();
-
         checkUser();
     }
+
+
+
 
 
     //check user signIn details
@@ -112,7 +118,6 @@ public class ProfileFragment extends Fragment {
             startActivity(new Intent(getActivity(), SignInActivity.class));
         }else {
             loadUserInfo();
-
         }
     }
 

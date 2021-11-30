@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/row_timeline_item"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/_50sdp"/>
+        android:layout_marginBottom="@dimen/_50sdp"
+        android:visibility="gone"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -31,7 +31,8 @@
         android:textAllCaps="true"
         android:textColor="@color/salmon"
         android:gravity="center"
+        android:visibility="visible"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:visibility="gone"/>
+        />
 
 </RelativeLayout>

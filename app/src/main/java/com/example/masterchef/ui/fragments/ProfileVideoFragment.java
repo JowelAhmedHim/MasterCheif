@@ -68,6 +68,7 @@ public class ProfileVideoFragment extends Fragment {
     }
 
     private void loadAllVideos() {
+
         videoArrayList = new ArrayList<>();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("VideoPosts");
@@ -75,23 +76,30 @@ public class ProfileVideoFragment extends Fragment {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        videoArrayList.clear();
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            ModelVideo modelVideo = ds.getValue(ModelVideo.class);
-                            videoArrayList.add(modelVideo);
-                        }
-                        if (videoArrayList.isEmpty()) {
+                        if (!dataSnapshot.exists()){
                             progressBar.setVisibility(View.GONE);
-                            recyclerViewUserVideos.setVisibility(View.GONE);
                             emptyState.setVisibility(View.VISIBLE);
-                        } else {
-                            progressBar.setVisibility(View.GONE);
-                            recyclerViewUserVideos.setVisibility(View.VISIBLE);
-                            emptyState.setVisibility(View.GONE);
-                            //setup adapter
-                            adapterVideo = new AdapterVideo(getContext(), videoArrayList);
-                            recyclerViewUserVideos.setAdapter(adapterVideo);
+
+                        }else {
+                            videoArrayList.clear();
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                ModelVideo modelVideo = ds.getValue(ModelVideo.class);
+                                videoArrayList.add(modelVideo);
+                            }
+                            if (videoArrayList.isEmpty()) {
+                                progressBar.setVisibility(View.GONE);
+                                recyclerViewUserVideos.setVisibility(View.GONE);
+                                emptyState.setVisibility(View.VISIBLE);
+                            } else {
+                                progressBar.setVisibility(View.GONE);
+                                recyclerViewUserVideos.setVisibility(View.VISIBLE);
+                                emptyState.setVisibility(View.GONE);
+                                //setup adapter
+                                adapterVideo = new AdapterVideo(getContext(), videoArrayList);
+                                recyclerViewUserVideos.setAdapter(adapterVideo);
+                            }
                         }
+
 
                     }
 

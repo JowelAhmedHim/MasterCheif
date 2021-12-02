@@ -164,5 +164,14 @@
         android:backgroundTint="@color/salmon"
         android:fontFamily="@font/ubuntu_medium"
         android:text="Sign Up" />
+    <com.google.android.material.button.MaterialButton
+
+        android:id="@+id/Google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/salmon"
+        android:fontFamily="@font/ubuntu_medium"
+        android:text="Google" />
+        />
 
 </LinearLayout>
